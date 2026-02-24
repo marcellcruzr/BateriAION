@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔋 GAC AION ES - Calculadora de Batería</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .card {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #0f3460;
+            border-radius: 10px;
+            background: #0f3460;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border: none;
+            border-radius: 10px;
+            color: #1a1a2e;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: #ffffff;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4444 100%);
+            color: #ffffff;
+        }
+
+        .result-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #00ff88;
+        }
+
+        .battery-info {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .percentage {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00d4ff;
+            margin: 10px 0;
+        }
+
+        .progress-container {
+            background: #0f3460;
+            border-radius: 15px;
+            height: 40px;
+            overflow: hidden;
+            position: relative;
+            margin: 20px 0;
+            border: 2px solid #00d4ff;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88 0%, #00d4ff 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .progress-bar.warning {
+            background: linear-gradient(90deg, #ffcc00 0%, #ff9900 100%);
+        }
+
+        .progress-bar.critical {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ff4444 100%);
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 500;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .alert.critical {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .alert.warning {
+            background: rgba(255, 204, 0, 0.2);
+            border: 2px solid #ffcc00;
+            color: #ffcc00;
+        }
+
+        .alert.success {
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        /* Historial */
+        .history-section {
+            margin-top: 20px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .history-header h3 {
+            color: #00d4ff;
+            font-size: 18px;
+        }
+
+        .history-list {
+            max-height: 250px;
+            overflow-y: auto;
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #16213e;
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .history-item.critical {
+            border-left-color: #ff6b6b;
+        }
+
+        .history-item.warning {
+            border-left-color: #ffcc00;
+        }
+
+        .history-item.success {
+            border-left-color: #00ff88;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-name {
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .history-details {
+            font-size: 12px;
+            color: #888888;
+        }
+
+        .history-percentage {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .history-delete {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            padding: 5px;
+        }
+
+        .history-delete:hover {
+            color: #ff4444;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: #888888;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #ff6b6b;
+        }
+
+        .disclaimer strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .info {
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .percentage {
+                font-size: 2.5em;
+            }
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .history-percentage {
+                margin-top: 5px;
+            }
+        }
+
+        /* Scrollbar personalizado */
+        .history-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: #0f3460;
+            border-radius: 4px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+            border-radius: 4px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb:hover {
+            background: #0099cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 GAC AION ES 🔋</h1>
+            <p>Calculadora de Batería</p>
+        </div>
+
+        <div class="card">
+            <div class="form-group">
+                <label for="userName">👤 ¿Cuál es tu nombre?</label>
+                <input type="text" id="userName" placeholder="Ingresa tu nombre">
+            </div>
+
+            <div class="form-group">
+                <label for="kmInput">🛣️ ¿Cuántos km hay en tu tablero?</label>
+                <input type="number" id="kmInput" placeholder="Ej: 220" step="0.1">
+            </div>
+
+            <button class="btn" onclick="calculateBattery()">⚡ Calcular Porcentaje</button>
+        </div>
+
+        <div class="card result-section" id="resultSection">
+            <div class="greeting" id="greeting"></div>
+            
+            <div class="battery-info">
+                <div>🔋 Nivel de batería</div>
+                <div class="percentage" id="percentage">0%</div>
+                <div id="kmDisplay">0 km restantes</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+
+            <div class="alert" id="alert"></div>
+
+            <div class="chart-container">
+                <canvas id="consumptionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Historial de Registros -->
+        <div class="card history-section">
+            <div class="history-header">
+                <h3>📜 Historial de Registros</h3>
+                <button class="btn btn-danger" onclick="clearHistory()" style="width: auto; padding: 8px 15px; font-size: 14px;">🗑️ Borrar Todo</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-history">No hay registros aún</div>
+            </div>
+        </div>
+
+        <div class="info">
+            💡 100% = 440 km | ⚠️ Recarga recomendada ≤ 150 km
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <strong>⚖️ AVISO LEGAL</strong>
+            Programa desarrollado por <strong>Marcell Cruz</strong>.<br>
+            La distribución del mismo sin consentimiento será castigada.
+        </div>
+    </div>
+
+    <script>
+        const MAX_RANGE = 440;
+        const LOW_BATTERY_THRESHOLD = 150;
+        let chart = null;
+        let history = JSON.parse(localStorage.getItem('batteryHistory')) || [];
+
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour >= 5 && hour < 12) return "Buenos días";
+            if (hour >= 12 && hour < 19) return "Buenas tardes";
+            return "Buenas noches";
+        }
+
+        function calculateBattery() {
+            const name = document.getElementById('userName').value.trim();
+            const kmText = document.getElementById('kmInput').value.trim();
+
+            if (!name) {
+                alert('⚠️ Por favor, ingresa tu nombre');
+                return;
+            }
+
+            if (!kmText) {
+                alert('⚠️ Por favor, ingresa los kilómetros restantes');
+                return;
+            }
+
+            const kmRemaining = parseFloat(kmText);
+
+            if (kmRemaining < 0) {
+                alert('❌ Los kilómetros no pueden ser negativos');
+                return;
+            }
+
+            let percentage = (kmRemaining / MAX_RANGE) * 100;
+            let displayKm = kmRemaining;
+
+            if (kmRemaining > MAX_RANGE) {
+                percentage = 100;
+                displayKm = MAX_RANGE;
+            }
+
+            // Mostrar resultados
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('greeting').textContent = `${getGreeting()} ${name}!`;
+            document.getElementById('percentage').textContent = `${percentage.toFixed(1)}%`;
+            document.getElementById('kmDisplay').textContent = `${displayKm.toFixed(0)} km restantes`;
+
+            // Actualizar barra de progreso
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = `${percentage}%`;
+            progressBar.textContent = `${percentage.toFixed(1)}%`;
+
+            // Cambiar color según nivel
+            progressBar.className = 'progress-bar';
+            if (percentage < 40) {
+                progressBar.classList.add('critical');
+            } else if (percentage < 70) {
+                progressBar.classList.add('warning');
+            }
+
+            // Mostrar alerta
+            const alertBox = document.getElementById('alert');
+            alertBox.className = 'alert';
+            
+            if (kmRemaining <= LOW_BATTERY_THRESHOLD) {
+                alertBox.classList.add('critical');
+                alertBox.innerHTML = `⚠️ ¡Batería baja!<br>Te recomendamos conectar a carga pronto.<br>Con ${kmRemaining.toFixed(0)} km restantes, evita trayectos largos.`;
+            } else if (kmRemaining <= 220) {
+                alertBox.classList.add('warning');
+                alertBox.innerHTML = '💡 Sugerencia: Planifica tu próxima recarga.';
+            } else {
+                alertBox.classList.add('success');
+                alertBox.innerHTML = '✅ Nivel óptimo. ¡Disfruta tu viaje!';
+            }
+
+            // Actualizar gráfica
+            updateChart(kmRemaining, percentage);
+
+            // Guardar en historial
+            saveToHistory(name, kmRemaining, percentage);
+
+            // Scroll suave a resultados
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ===== HISTORIAL =====
+        function saveToHistory(name, km, percentage) {
+            const record = {
+                id: Date.now(),
+                name: name,
+                km: km,
+                percentage: percentage,
+                date: new Date().toLocaleString('es-ES')
+            };
+
+            history.unshift(record);
+
+            if (history.length > 20) {
+                history = history.slice(0, 20);
+            }
+
+            localStorage.setItem('batteryHistory', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="empty-history">No hay registros aún</div>';
+                return;
+            }
+
+            historyList.innerHTML = '';
+
+            history.forEach(record => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+
+                if (record.percentage < 40) {
+                    item.classList.add('critical');
+                } else if (record.percentage < 70) {
+                    item.classList.add('warning');
+                } else {
+                    item.classList.add('success');
+                }
+
+                item.innerHTML = `
+                    <div class="history-info">
+                        <div class="history-name">👤 ${record.name}</div>
+                        <div class="history-details">📅 ${record.date} | 🛣️ ${record.km.toFixed(0)} km</div>
+                    </div>
+                    <div class="history-percentage">${record.percentage.toFixed(1)}%</div>
+                    <button class="history-delete" onclick="deleteHistoryItem(${record.id})">🗑️</button>
+                `;
+
+                historyList.appendChild(item);
+            });
+        }
+
+        function deleteHistoryItem(id) {
+            history = history.filter(record => record.id !== id);
+            localStorage.setItem('batteryHistory', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function clearHistory() {
+            if (confirm('¿Estás seguro de que quieres borrar todo el historial?')) {
+                history = [];
+                localStorage.setItem('batteryHistory', JSON.stringify(history));
+                renderHistory();
+            }
+        }
+
+        function createChart() {
+            const ctx = document.getElementById('consumptionChart').getContext('2d');
+            
+            const kmValues = [];
+            const percentValues = [];
+            
+            for (let km = 0; km <= MAX_RANGE; km += 20) {
+                kmValues.push(km);
+                percentValues.push((km / MAX_RANGE) * 100);
+            }
+
+            // ✅ CORREGIDO: Agregado "data:" antes del objeto
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: kmValues,
+                    datasets: [{
+                        label: 'Autonomía',
+                        data: percentValues,
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }, {
+                        label: 'Tu nivel actual',
+                        data: [],
+                        backgroundColor: '#00ff88',
+                        borderColor: '#ffffff',
+                        borderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        showLine: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '📊 Gráfica de Consumo',
+                            color: '#00d4ff',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Kilómetros restantes',
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Porcentaje de batería (%)',
+                                color: '#ffffff'
+                            },
+                            min: 0,
+                            max: 105,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(kmRemaining, percentage) {
+            if (!chart) {
+                createChart();
+            }
+
+            chart.data.datasets[1].data = [{x: kmRemaining, y: percentage}];
+            chart.update();
+        }
+
+        // Permitir calcular con Enter
+        document.getElementById('kmInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateBattery();
+            }
+        });
+
+        // Inicializar al cargar
+        window.onload = function() {
+            createChart();
+            renderHistory();
+        };
+    </script>
+</body>
+</html>
