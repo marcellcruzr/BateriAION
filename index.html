@@ -3,9 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔋 GAC AION ES - Calculadora de Batería</title>
+    <meta name="theme-color" content="#00d4ff">
+    <title>Calculadora de Batería | niteg.co</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ2FsY3VsYWRvcmEgZGUgQmF0ZXLDrWEiLCJzaG9ydF9uYW1lIjoiQmF0ZXJpQ2FsYyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMWExYTJlIiwidGhlbWVfY29sb3IiOiIjMDBkNGZmIn0=">
+    
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --secondary: #16213e;
+            --bg-dark: #1a1a2e;
+            --bg-light: #f0f4f8;
+            --text-dark: #ffffff;
+            --text-light: #2d3748;
+            --success: #00ff88;
+            --warning: #ffcc00;
+            --danger: #ff6b6b;
+            --card-bg-dark: #16213e;
+            --card-bg-light: #ffffff;
+            --input-bg-dark: #0f3460;
+            --input-bg-light: #e2e8f0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,87 +43,237 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--secondary) 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #ffffff;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #e0e7ff 0%, var(--bg-light) 100%);
+            color: var(--text-light);
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
+        /* Header Moderno */
         .header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 20px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 153, 204, 0.05) 100%);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
         }
 
         .header h1 {
-            font-size: 2em;
-            color: #00d4ff;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            font-size: 2.2em;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary) 0%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 212, 255, 0.2);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--primary);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+            background: rgba(0, 212, 255, 0.3);
+        }
+
+        /* Cards Modernas */
         .card {
-            background: #16213e;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: var(--card-bg-dark);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
         }
 
+        body.light-mode .card {
+            background: var(--card-bg-light);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 212, 255, 0.15);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Selector de Vehículo */
+        .vehicle-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .vehicle-option {
+            position: relative;
+            padding: 20px;
+            background: var(--input-bg-dark);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        body.light-mode .vehicle-option {
+            background: var(--input-bg-light);
+        }
+
+        .vehicle-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .vehicle-option.active {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .vehicle-option.coming-soon {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .vehicle-option.coming-soon::after {
+            content: "Próximamente";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .vehicle-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .vehicle-name {
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        /* Formularios */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 0.9em;
             font-weight: 500;
+            color: var(--primary);
         }
 
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #0f3460;
-            border-radius: 10px;
-            background: #0f3460;
-            color: #ffffff;
-            font-size: 16px;
+            padding: 15px 18px;
+            border: 2px solid var(--input-bg-dark);
+            border-radius: 12px;
+            background: var(--input-bg-dark);
+            color: var(--text-dark);
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
             transition: all 0.3s;
         }
 
-        input[type="text"]:focus,
-        input[type="number"]:focus {
-            outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        body.light-mode input,
+        body.light-mode select {
+            background: var(--input-bg-light);
+            border-color: #cbd5e0;
+            color: var(--text-light);
         }
 
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Botones Modernos */
         .btn {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             border: none;
-            border-radius: 10px;
-            color: #1a1a2e;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-bottom: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+            margin-bottom: 12px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
         }
 
         .btn:active {
@@ -102,336 +282,691 @@
 
         .btn-secondary {
             background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff4444 100%);
-            color: #ffffff;
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #00cc6a 100%);
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
         }
 
+        .btn-small {
+            width: auto;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        /* Resultados */
         .result-section {
             display: none;
-            animation: fadeIn 0.5s;
+            animation: slideIn 0.5s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         .greeting {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #00ff88;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: var(--success);
+            font-weight: 500;
         }
 
-        .battery-info {
+        .battery-display {
             text-align: center;
-            margin: 20px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%);
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 2px solid rgba(0, 212, 255, 0.3);
         }
 
         .percentage {
-            font-size: 3em;
-            font-weight: bold;
-            color: #00d4ff;
+            font-size: 4em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
             margin: 10px 0;
         }
 
+        .km-display {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Barra de Progreso Animada */
         .progress-container {
-            background: #0f3460;
+            background: var(--input-bg-dark);
             border-radius: 15px;
-            height: 40px;
+            height: 45px;
             overflow: hidden;
             position: relative;
-            margin: 20px 0;
-            border: 2px solid #00d4ff;
+            margin: 25px 0;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-mode .progress-container {
+            background: #e2e8f0;
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #00ff88 0%, #00d4ff 100%);
-            transition: width 0.5s ease;
+            background: linear-gradient(90deg, var(--success) 0%, var(--primary) 100%);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .progress-bar.warning {
-            background: linear-gradient(90deg, #ffcc00 0%, #ff9900 100%);
+            background: linear-gradient(90deg, var(--warning) 0%, #ff9900 100%);
         }
 
         .progress-bar.critical {
-            background: linear-gradient(90deg, #ff6b6b 0%, #ff4444 100%);
+            background: linear-gradient(90deg, var(--danger) 0%, #ff4444 100%);
         }
 
+        /* Alertas Modernas */
         .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
+            padding: 18px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
             text-align: center;
             font-weight: 500;
+            border-left: 4px solid;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            50% { opacity: 0.85; }
         }
 
         .alert.critical {
-            background: rgba(255, 107, 107, 0.2);
-            border: 2px solid #ff6b6b;
-            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.15);
+            border-left-color: var(--danger);
+            color: var(--danger);
         }
 
         .alert.warning {
-            background: rgba(255, 204, 0, 0.2);
-            border: 2px solid #ffcc00;
-            color: #ffcc00;
+            background: rgba(255, 204, 0, 0.15);
+            border-left-color: var(--warning);
+            color: #ffb700;
         }
 
         .alert.success {
-            background: rgba(0, 255, 136, 0.2);
-            border: 2px solid #00ff88;
-            color: #00ff88;
+            background: rgba(0, 255, 136, 0.15);
+            border-left-color: var(--success);
+            color: var(--success);
         }
 
+        /* Costo y Tiempo */
+        .cost-time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .cost-card, .time-card {
+            padding: 20px;
+            background: var(--input-bg-dark);
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid rgba(0, 212, 255, 0.2);
+        }
+
+        body.light-mode .cost-card,
+        body.light-mode .time-card {
+            background: var(--input-bg-light);
+        }
+
+        .cost-label, .time-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .cost-value, .time-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Gráfica */
         .chart-container {
             position: relative;
-            height: 300px;
-            margin-top: 20px;
+            height: 280px;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--input-bg-dark);
+            border-radius: 15px;
+        }
+
+        body.light-mode .chart-container {
+            background: var(--input-bg-light);
         }
 
         /* Historial */
         .history-section {
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .history-header h3 {
-            color: #00d4ff;
-            font-size: 18px;
+            color: var(--primary);
+            font-size: 1.2em;
+            font-weight: 600;
         }
 
         .history-list {
-            max-height: 250px;
+            max-height: 300px;
             overflow-y: auto;
-            background: #0f3460;
-            border-radius: 10px;
-            padding: 10px;
+            background: var(--input-bg-dark);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        body.light-mode .history-list {
+            background: var(--input-bg-light);
         }
 
         .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            margin-bottom: 8px;
-            background: #16213e;
-            border-radius: 8px;
-            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: var(--secondary);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
             animation: slideIn 0.3s;
+            transition: all 0.3s;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
+        body.light-mode .history-item {
+            background: #f7fafc;
         }
 
-        .history-item.critical {
-            border-left-color: #ff6b6b;
+        .history-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
         }
 
-        .history-item.warning {
-            border-left-color: #ffcc00;
-        }
-
-        .history-item.success {
-            border-left-color: #00ff88;
-        }
+        .history-item.critical { border-left-color: var(--danger); }
+        .history-item.warning { border-left-color: var(--warning); }
+        .history-item.success { border-left-color: var(--success); }
 
         .history-info {
             flex: 1;
         }
 
         .history-name {
-            font-weight: bold;
-            color: #ffffff;
+            font-weight: 600;
             margin-bottom: 4px;
         }
 
         .history-details {
-            font-size: 12px;
-            color: #888888;
+            font-size: 0.8em;
+            opacity: 0.7;
         }
 
         .history-percentage {
-            font-size: 20px;
-            font-weight: bold;
-            color: #00d4ff;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 15px;
         }
 
         .history-delete {
             background: none;
             border: none;
-            color: #ff6b6b;
+            color: var(--danger);
             cursor: pointer;
             font-size: 18px;
-            margin-left: 10px;
             padding: 5px;
+            opacity: 0.7;
+            transition: all 0.3s;
         }
 
         .history-delete:hover {
-            color: #ff4444;
+            opacity: 1;
+            transform: scale(1.2);
         }
 
         .empty-history {
             text-align: center;
-            color: #888888;
-            padding: 20px;
+            padding: 40px;
+            opacity: 0.6;
             font-style: italic;
+        }
+
+        /* Configuración de Carga */
+        .config-section {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 255, 136, 0.03) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--input-bg-dark);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        body.light-mode .radio-option {
+            background: var(--input-bg-light);
+        }
+
+        .radio-option:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
         }
 
         /* Disclaimer */
         .disclaimer {
-            background: rgba(255, 107, 107, 0.1);
-            border: 1px solid #ff6b6b;
-            border-radius: 10px;
-            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 68, 68, 0.05) 100%);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            padding: 20px;
             margin-top: 30px;
             text-align: center;
-            font-size: 12px;
-            color: #ff6b6b;
+            font-size: 0.85em;
+            color: var(--danger);
         }
 
         .disclaimer strong {
             display: block;
-            margin-bottom: 5px;
-            font-size: 13px;
+            margin-bottom: 8px;
+            font-size: 1em;
         }
 
-        .info {
+        .disclaimer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Info Footer */
+        .info-footer {
             text-align: center;
-            font-size: 12px;
-            color: #888888;
-            margin-top: 20px;
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-top: 25px;
+            padding: 15px;
         }
 
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.5em;
-            }
-            .percentage {
-                font-size: 2.5em;
-            }
-            .history-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .history-percentage {
-                margin-top: 5px;
-            }
+        /* Info Box */
+        .info-box {
+            text-align: center;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        .info-box a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
         }
 
         /* Scrollbar personalizado */
-        .history-list::-webkit-scrollbar {
+        ::-webkit-scrollbar {
             width: 8px;
         }
 
-        .history-list::-webkit-scrollbar-track {
-            background: #0f3460;
+        ::-webkit-scrollbar-track {
+            background: var(--input-bg-dark);
             border-radius: 4px;
         }
 
-        .history-list::-webkit-scrollbar-thumb {
-            background: #00d4ff;
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
             border-radius: 4px;
         }
 
-        .history-list::-webkit-scrollbar-thumb:hover {
-            background: #0099cc;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.7em;
+            }
+            
+            .percentage {
+                font-size: 3em;
+            }
+            
+            .input-group,
+            .cost-time-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .history-percentage {
+                margin: 0;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>🚗 GAC AION ES 🔋</h1>
-            <p>Calculadora de Batería</p>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                <i class="fas fa-sun" id="themeIcon"></i>
+            </button>
+            <h1><i class="fas fa-battery-half"></i> Calculadora de Batería</h1>
+            <p>Monitorea tu vehículo eléctrico de forma inteligente</p>
         </div>
 
+        <!-- Selector de Vehículo -->
         <div class="card">
+            <div class="card-title">
+                <i class="fas fa-car"></i>
+                Selecciona tu Vehículo
+            </div>
+            <div class="vehicle-selector">
+                <div class="vehicle-option active" onclick="selectVehicle('aion-es')" data-vehicle="aion-es">
+                    <div class="vehicle-icon">🚗</div>
+                    <div class="vehicle-name">GAC AION ES</div>
+                    <small style="opacity: 0.7; font-size: 0.8em;">48.5 kWh</small>
+                </div>
+                <div class="vehicle-option coming-soon" onclick="selectVehicle('model-3')">
+                    <div class="vehicle-icon">🚙</div>
+                    <div class="vehicle-name">Tesla Model 3</div>
+                </div>
+                <div class="vehicle-option coming-soon" onclick="selectVehicle('leaf')">
+                    <div class="vehicle-icon">🚘</div>
+                    <div class="vehicle-name">Nissan Leaf</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Datos Principales -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-calculator"></i>
+                Datos de la Batería
+            </div>
+            
             <div class="form-group">
-                <label for="userName">👤 ¿Cuál es tu nombre?</label>
+                <label for="userName"><i class="fas fa-user"></i> ¿Cuál es tu nombre?</label>
                 <input type="text" id="userName" placeholder="Ingresa tu nombre">
             </div>
 
             <div class="form-group">
-                <label for="kmInput">🛣️ ¿Cuántos km hay en tu tablero?</label>
+                <label for="kmInput"><i class="fas fa-road"></i> ¿Cuántos km hay en tu tablero?</label>
                 <input type="number" id="kmInput" placeholder="Ej: 220" step="0.1">
             </div>
 
-            <button class="btn" onclick="calculateBattery()">⚡ Calcular Porcentaje</button>
+            <button class="btn" onclick="calculateBattery()">
+                <i class="fas fa-bolt"></i> Calcular Porcentaje
+            </button>
         </div>
 
+        <!-- Configuración de Carga -->
+        <div class="card config-section">
+            <div class="card-title">
+                <i class="fas fa-plug"></i>
+                Configuración de Carga
+            </div>
+
+            <div class="form-group">
+                <label for="tariffInput"><i class="fas fa-tag"></i> Tarifa eléctrica (MXN/kWh)</label>
+                <input type="number" id="tariffInput" value="7.50" step="0.01" placeholder="7.50">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-charging-station"></i> Tipo de cargador</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="chargerType" value="7" checked>
+                        <span>🏠 Casa (7 kW)</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="chargerType" value="22">
+                        <span>🏢 Público Nivel 2 (22 kW)</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="chargerType" value="50">
+                        <span>⚡ Carga Rápida DC (50 kW)</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="chargerType" value="150">
+                        <span>🚀 Super Carga (150 kW)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="targetLevel"><i class="fas fa-bullseye"></i> Nivel objetivo de carga: <span id="targetValue">100</span>%</label>
+                <input type="range" id="targetLevel" min="50" max="100" value="100" step="5" 
+                       oninput="document.getElementById('targetValue').textContent = this.value">
+            </div>
+        </div>
+
+        <!-- Resultados -->
         <div class="card result-section" id="resultSection">
             <div class="greeting" id="greeting"></div>
             
-            <div class="battery-info">
+            <div class="battery-display">
                 <div>🔋 Nivel de batería</div>
                 <div class="percentage" id="percentage">0%</div>
-                <div id="kmDisplay">0 km restantes</div>
+                <div class="km-display" id="kmDisplay">0 km restantes</div>
             </div>
 
             <div class="progress-container">
                 <div class="progress-bar" id="progressBar">0%</div>
             </div>
 
+            <!-- Costo y Tiempo -->
+            <div class="cost-time-grid">
+                <div class="cost-card">
+                    <div class="cost-label"><i class="fas fa-money-bill-wave"></i> Costo aproximado</div>
+                    <div class="cost-value" id="costValue">$0.00</div>
+                    <small style="opacity: 0.7;">MXN</small>
+                </div>
+                <div class="time-card">
+                    <div class="time-label"><i class="fas fa-clock"></i> Tiempo de carga</div>
+                    <div class="time-value" id="timeValue">0h</div>
+                    <small style="opacity: 0.7;" id="timeNote">estimado</small>
+                </div>
+            </div>
+
             <div class="alert" id="alert"></div>
+
+            <!-- Info Box sobre carga realista -->
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Nota:</strong> La carga rápida DC de 30% a 80% toma ~45 min en tu AION ES. 
+                <a href="#" onclick="alert('🔋 La batería carga más rápido entre 20-80%. Por encima de 80%, el BMS reduce la potencia para proteger la batería. Por eso las cargas en ruta suelen ser parciales.')">
+                    ¿Por qué?
+                </a>
+            </div>
 
             <div class="chart-container">
                 <canvas id="consumptionChart"></canvas>
             </div>
         </div>
 
-        <!-- Historial de Registros -->
+        <!-- Historial -->
         <div class="card history-section">
             <div class="history-header">
-                <h3>📜 Historial de Registros</h3>
-                <button class="btn btn-danger" onclick="clearHistory()" style="width: auto; padding: 8px 15px; font-size: 14px;">🗑️ Borrar Todo</button>
+                <h3><i class="fas fa-history"></i> Historial de Registros</h3>
+                <div>
+                    <button class="btn btn-secondary btn-small" onclick="exportHistory()" style="margin-right: 10px;">
+                        <i class="fas fa-download"></i> Exportar CSV
+                    </button>
+                    <button class="btn btn-small" onclick="clearHistory()" style="background: linear-gradient(135deg, var(--danger) 0%, #ff4444 100%);">
+                        <i class="fas fa-trash"></i> Borrar Todo
+                    </button>
+                </div>
             </div>
             <div class="history-list" id="historyList">
                 <div class="empty-history">No hay registros aún</div>
             </div>
         </div>
 
-        <div class="info">
-            💡 100% = 440 km | ⚠️ Recarga recomendada ≤ 150 km
+        <!-- Info Footer -->
+        <div class="info-footer">
+            <p><i class="fas fa-info-circle"></i> 100% = 440 km | ⚠️ Recarga recomendada ≤ 150 km</p>
         </div>
 
         <!-- Disclaimer -->
         <div class="disclaimer">
-            <strong>⚖️ AVISO LEGAL</strong>
-            Programa desarrollado por <strong>Marcell Cruz</strong>.<br>
+            <strong><i class="fas fa-shield-alt"></i> AVISO LEGAL</strong>
+            Programa desarrollado por <a href="https://niteg.co" target="_blank">niteg.co</a>.<br>
             La distribución del mismo sin consentimiento será castigada.
         </div>
     </div>
 
     <script>
-        const MAX_RANGE = 440;
-        const LOW_BATTERY_THRESHOLD = 150;
+        // Configuración de vehículos
+        const vehicles = {
+            'aion-es': {
+                name: 'GAC AION ES',
+                batteryCapacity: 48.5,
+                maxRange: 440,
+                efficiency: 0.90
+            },
+            'model-3': {
+                name: 'Tesla Model 3',
+                batteryCapacity: 60,
+                maxRange: 491,
+                efficiency: 0.92
+            },
+            'leaf': {
+                name: 'Nissan Leaf',
+                batteryCapacity: 40,
+                maxRange: 270,
+                efficiency: 0.88
+            }
+        };
+
+        let currentVehicle = 'aion-es';
         let chart = null;
         let history = JSON.parse(localStorage.getItem('batteryHistory')) || [];
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            loadTariffPreference();
+            renderHistory();
+            createChart();
+        });
+
+        // Cambiar tema
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            document.getElementById('themeIcon').className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeIcon').className = 'fas fa-moon';
+            }
+        }
+
+        // Cargar tarifa guardada
+        function loadTariffPreference() {
+            const saved = localStorage.getItem('userTariff');
+            if (saved) {
+                document.getElementById('tariffInput').value = saved;
+            }
+        }
+
+        // Guardar tarifa
+        function saveTariffPreference(tariff) {
+            localStorage.setItem('userTariff', tariff);
+        }
+
+        // Seleccionar vehículo
+        function selectVehicle(vehicle) {
+            if (vehicle !== 'aion-es') {
+                alert('🚗 Próximamente disponible');
+                return;
+            }
+            
+            currentVehicle = vehicle;
+            document.querySelectorAll('.vehicle-option').forEach(opt => {
+                opt.classList.remove('active');
+                if (opt.dataset.vehicle === vehicle) {
+                    opt.classList.add('active');
+                }
+            });
+        }
 
         function getGreeting() {
             const hour = new Date().getHours();
@@ -440,9 +975,50 @@
             return "Buenas noches";
         }
 
+        // Cálculo de tiempo de carga REALISTA
+        function calculateChargingTime(currentPercent, targetPercent, chargerPower) {
+            const vehicle = vehicles[currentVehicle];
+            
+            // Carga rápida DC: modelo empírico basado en experiencia real
+            if (chargerPower >= 50 && currentPercent >= 20 && targetPercent <= 85) {
+                const typicalMinutes = 45; // 30% → 80% en ~45 min
+                const typicalRange = 50; // 80-30 = 50 puntos porcentuales
+                const userRange = Math.abs(targetPercent - currentPercent);
+                
+                let estimatedMinutes = (userRange / typicalRange) * typicalMinutes;
+                estimatedMinutes = Math.max(20, Math.min(60, estimatedMinutes));
+                
+                return {
+                    minutes: Math.round(estimatedMinutes),
+                    method: 'fast-charge',
+                    note: '⚡ Carga rápida DC (real)'
+                };
+            }
+            
+            // Carga lenta AC: cálculo teórico (más preciso)
+            else {
+                const capacity = vehicle.batteryCapacity;
+                const efficiency = vehicle.efficiency;
+                const energyNeeded = ((targetPercent - currentPercent) / 100) * capacity / efficiency;
+                const hours = energyNeeded / chargerPower;
+                
+                return {
+                    minutes: Math.round(hours * 60),
+                    method: 'home-charge',
+                    note: '🏠 Carga AC (teórico)'
+                };
+            }
+        }
+
         function calculateBattery() {
             const name = document.getElementById('userName').value.trim();
             const kmText = document.getElementById('kmInput').value.trim();
+            let tariff = parseFloat(document.getElementById('tariffInput').value) || 7.50;
+            const chargerPower = parseFloat(document.querySelector('input[name="chargerType"]:checked').value);
+            const targetLevel = parseInt(document.getElementById('targetLevel').value);
+
+            // Guardar tarifa preferida
+            saveTariffPreference(tariff);
 
             if (!name) {
                 alert('⚠️ Por favor, ingresa tu nombre');
@@ -455,44 +1031,64 @@
             }
 
             const kmRemaining = parseFloat(kmText);
+            const vehicle = vehicles[currentVehicle];
 
             if (kmRemaining < 0) {
                 alert('❌ Los kilómetros no pueden ser negativos');
                 return;
             }
 
-            let percentage = (kmRemaining / MAX_RANGE) * 100;
+            // Calcular porcentaje actual
+            let percentage = (kmRemaining / vehicle.maxRange) * 100;
             let displayKm = kmRemaining;
 
-            if (kmRemaining > MAX_RANGE) {
+            if (kmRemaining > vehicle.maxRange) {
                 percentage = 100;
-                displayKm = MAX_RANGE;
+                displayKm = vehicle.maxRange;
             }
+
+            // Calcular energía y costo
+            const currentKwh = (percentage / 100) * vehicle.batteryCapacity;
+            const targetKwh = (targetLevel / 100) * vehicle.batteryCapacity;
+            const energyNeeded = (targetKwh - currentKwh) / vehicle.efficiency;
+            const cost = Math.max(0, energyNeeded * tariff);
+            
+            // Calcular tiempo REALISTA
+            const chargingInfo = calculateChargingTime(percentage, targetLevel, chargerPower);
 
             // Mostrar resultados
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('greeting').textContent = `${getGreeting()} ${name}!`;
             document.getElementById('percentage').textContent = `${percentage.toFixed(1)}%`;
-            document.getElementById('kmDisplay').textContent = `${displayKm.toFixed(0)} km restantes`;
+            document.getElementById('kmDisplay').textContent = `${displayKm.toFixed(0)} km restantes (${vehicle.name})`;
 
-            // Actualizar barra de progreso
+            // Actualizar barra
             const progressBar = document.getElementById('progressBar');
             progressBar.style.width = `${percentage}%`;
             progressBar.textContent = `${percentage.toFixed(1)}%`;
-
-            // Cambiar color según nivel
             progressBar.className = 'progress-bar';
-            if (percentage < 40) {
-                progressBar.classList.add('critical');
-            } else if (percentage < 70) {
-                progressBar.classList.add('warning');
-            }
+            
+            if (percentage < 40) progressBar.classList.add('critical');
+            else if (percentage < 70) progressBar.classList.add('warning');
 
-            // Mostrar alerta
+            // Mostrar costo y tiempo
+            document.getElementById('costValue').textContent = `$${cost.toFixed(2)}`;
+            
+            const hours = Math.floor(chargingInfo.minutes / 60);
+            const minutes = chargingInfo.minutes % 60;
+            
+            if (hours > 0) {
+                document.getElementById('timeValue').textContent = `${hours}h ${minutes}m`;
+            } else {
+                document.getElementById('timeValue').textContent = `${minutes} min`;
+            }
+            document.getElementById('timeNote').textContent = chargingInfo.note;
+
+            // Alerta
             const alertBox = document.getElementById('alert');
             alertBox.className = 'alert';
             
-            if (kmRemaining <= LOW_BATTERY_THRESHOLD) {
+            if (kmRemaining <= 150) {
                 alertBox.classList.add('critical');
                 alertBox.innerHTML = `⚠️ ¡Batería baja!<br>Te recomendamos conectar a carga pronto.<br>Con ${kmRemaining.toFixed(0)} km restantes, evita trayectos largos.`;
             } else if (kmRemaining <= 220) {
@@ -503,32 +1099,26 @@
                 alertBox.innerHTML = '✅ Nivel óptimo. ¡Disfruta tu viaje!';
             }
 
-            // Actualizar gráfica
             updateChart(kmRemaining, percentage);
-
-            // Guardar en historial
-            saveToHistory(name, kmRemaining, percentage);
-
-            // Scroll suave a resultados
+            saveToHistory(name, kmRemaining, percentage, cost, vehicle.name);
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // ===== HISTORIAL =====
-        function saveToHistory(name, km, percentage) {
+        // Historial
+        function saveToHistory(name, km, percentage, cost, vehicleName) {
             const record = {
                 id: Date.now(),
-                name: name,
-                km: km,
-                percentage: percentage,
+                name,
+                km,
+                percentage,
+                cost,
+                vehicle: vehicleName,
                 date: new Date().toLocaleString('es-ES')
             };
 
             history.unshift(record);
-
-            if (history.length > 20) {
-                history = history.slice(0, 20);
-            }
-
+            if (history.length > 20) history = history.slice(0, 20);
+            
             localStorage.setItem('batteryHistory', JSON.stringify(history));
             renderHistory();
         }
@@ -537,70 +1127,89 @@
             const historyList = document.getElementById('historyList');
 
             if (history.length === 0) {
-                historyList.innerHTML = '<div class="empty-history">No hay registros aún</div>';
+                historyList.innerHTML = '<div class="empty-history"><i class="fas fa-inbox"></i><br>No hay registros aún</div>';
                 return;
             }
 
             historyList.innerHTML = '';
-
             history.forEach(record => {
                 const item = document.createElement('div');
                 item.className = 'history-item';
-
-                if (record.percentage < 40) {
-                    item.classList.add('critical');
-                } else if (record.percentage < 70) {
-                    item.classList.add('warning');
-                } else {
-                    item.classList.add('success');
-                }
+                
+                if (record.percentage < 40) item.classList.add('critical');
+                else if (record.percentage < 70) item.classList.add('warning');
+                else item.classList.add('success');
 
                 item.innerHTML = `
                     <div class="history-info">
-                        <div class="history-name">👤 ${record.name}</div>
-                        <div class="history-details">📅 ${record.date} | 🛣️ ${record.km.toFixed(0)} km</div>
+                        <div class="history-name">👤 ${record.name} • ${record.vehicle}</div>
+                        <div class="history-details">📅 ${record.date} | 🛣️ ${record.km.toFixed(0)} km | 💰 $${record.cost.toFixed(2)}</div>
                     </div>
                     <div class="history-percentage">${record.percentage.toFixed(1)}%</div>
-                    <button class="history-delete" onclick="deleteHistoryItem(${record.id})">🗑️</button>
+                    <button class="history-delete" onclick="deleteHistoryItem(${record.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 `;
-
                 historyList.appendChild(item);
             });
         }
 
         function deleteHistoryItem(id) {
-            history = history.filter(record => record.id !== id);
+            history = history.filter(r => r.id !== id);
             localStorage.setItem('batteryHistory', JSON.stringify(history));
             renderHistory();
         }
 
         function clearHistory() {
-            if (confirm('¿Estás seguro de que quieres borrar todo el historial?')) {
+            if (confirm('¿Estás seguro de borrar todo el historial?')) {
                 history = [];
                 localStorage.setItem('batteryHistory', JSON.stringify(history));
                 renderHistory();
             }
         }
 
+        function exportHistory() {
+            if (history.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+
+            let csv = 'Fecha,Nombre,Vehiculo,KM,Porcentaje,Costo (MXN)\n';
+            history.forEach(r => {
+                csv += `${r.date},${r.name},${r.vehicle},${r.km},${r.percentage.toFixed(2)},${r.cost.toFixed(2)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `historial_bateria_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // Gráfica
         function createChart() {
             const ctx = document.getElementById('consumptionChart').getContext('2d');
+            const vehicle = vehicles[currentVehicle];
             
             const kmValues = [];
             const percentValues = [];
             
-            for (let km = 0; km <= MAX_RANGE; km += 20) {
+            for (let km = 0; km <= vehicle.maxRange; km += 20) {
                 kmValues.push(km);
-                percentValues.push((km / MAX_RANGE) * 100);
+                percentValues.push((km / vehicle.maxRange) * 100);
             }
 
-            // ✅ CORREGIDO: Agregado "data:" antes del objeto
+            const isLight = document.body.classList.contains('light-mode');
+            const textColor = isLight ? '#2d3748' : '#ffffff';
+            const gridColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
+
             chart = new Chart(ctx, {
                 type: 'line',
-                data: {
+                 {
                     labels: kmValues,
                     datasets: [{
                         label: 'Autonomía',
-                        data: percentValues,
+                         percentValues,
                         borderColor: '#00d4ff',
                         backgroundColor: 'rgba(0, 212, 255, 0.1)',
                         borderWidth: 3,
@@ -608,7 +1217,7 @@
                         tension: 0.4,
                         pointRadius: 0
                     }, {
-                        label: 'Tu nivel actual',
+                        label: 'Tu nivel',
                         data: [],
                         backgroundColor: '#00ff88',
                         borderColor: '#ffffff',
@@ -623,78 +1232,43 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            labels: {
-                                color: '#ffffff',
-                                font: {
-                                    size: 12
-                                }
-                            }
+                            labels: { color: textColor, font: { size: 11 } }
                         },
                         title: {
                             display: true,
                             text: '📊 Gráfica de Consumo',
                             color: '#00d4ff',
-                            font: {
-                                size: 16,
-                                weight: 'bold'
-                            }
+                            font: { size: 14, weight: 'bold' }
                         }
                     },
                     scales: {
                         x: {
-                            title: {
-                                display: true,
-                                text: 'Kilómetros restantes',
-                                color: '#ffffff'
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: '#ffffff'
-                            }
+                            title: { display: true, text: 'Kilómetros', color: textColor },
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
                         },
                         y: {
-                            title: {
-                                display: true,
-                                text: 'Porcentaje de batería (%)',
-                                color: '#ffffff'
-                            },
                             min: 0,
                             max: 105,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: '#ffffff'
-                            }
+                            title: { display: true, text: 'Porcentaje (%)', color: textColor },
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
                         }
                     }
                 }
             });
         }
 
-        function updateChart(kmRemaining, percentage) {
-            if (!chart) {
-                createChart();
-            }
-
-            chart.data.datasets[1].data = [{x: kmRemaining, y: percentage}];
+        function updateChart(km, percentage) {
+            if (!chart) createChart();
+            chart.data.datasets[1].data = [{x: km, y: percentage}];
             chart.update();
         }
 
-        // Permitir calcular con Enter
-        document.getElementById('kmInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                calculateBattery();
-            }
+        // Enter para calcular
+        document.getElementById('kmInput')?.addEventListener('keypress', e => {
+            if (e.key === 'Enter') calculateBattery();
         });
-
-        // Inicializar al cargar
-        window.onload = function() {
-            createChart();
-            renderHistory();
-        };
     </script>
 </body>
 </html>
