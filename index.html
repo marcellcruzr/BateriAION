@@ -6,9 +6,6 @@
     <meta name="theme-color" content="#00d4ff">
     <title>Calculadora de Batería | niteg.co</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ2FsY3VsYWRvcmEgZGUgQmF0ZXLDrWEiLCJzaG9ydF9uYW1lIjoiQmF0ZXJpQ2FsYyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMWExYTJlIiwidGhlbWVfY29sb3IiOiIjMDBkNGZmIn0=">
-    
     <!-- Google Fonts - Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -61,7 +58,6 @@
             margin: 0 auto;
         }
 
-        /* Header Moderno */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -113,7 +109,6 @@
             background: rgba(0, 212, 255, 0.3);
         }
 
-        /* Cards Modernas */
         .card {
             background: var(--card-bg-dark);
             border-radius: 20px;
@@ -145,7 +140,6 @@
             gap: 10px;
         }
 
-        /* Selector de Vehículo */
         .vehicle-selector {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -207,7 +201,6 @@
             font-size: 0.95em;
         }
 
-        /* Formularios */
         .form-group {
             margin-bottom: 22px;
         }
@@ -248,13 +241,6 @@
             box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
         }
 
-        .input-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        /* Botones Modernos */
         .btn {
             width: 100%;
             padding: 16px;
@@ -285,32 +271,20 @@
             box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, var(--success) 0%, #00cc6a 100%);
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-        }
-
         .btn-small {
             width: auto;
             padding: 10px 20px;
             font-size: 14px;
         }
 
-        /* Resultados */
         .result-section {
             display: none;
             animation: slideIn 0.5s ease;
         }
 
         @keyframes slideIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(-20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .greeting {
@@ -346,7 +320,6 @@
             font-weight: 400;
         }
 
-        /* Barra de Progreso Animada */
         .progress-container {
             background: var(--input-bg-dark);
             border-radius: 15px;
@@ -400,7 +373,6 @@
             background: linear-gradient(90deg, var(--danger) 0%, #ff4444 100%);
         }
 
-        /* Alertas Modernas */
         .alert {
             padding: 18px 20px;
             border-radius: 12px;
@@ -434,7 +406,6 @@
             color: var(--success);
         }
 
-        /* Costo y Tiempo */
         .cost-time-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -467,7 +438,6 @@
             color: var(--primary);
         }
 
-        /* Gráfica */
         .chart-container {
             position: relative;
             height: 280px;
@@ -481,7 +451,6 @@
             background: var(--input-bg-light);
         }
 
-        /* Historial */
         .history-section {
             margin-top: 25px;
         }
@@ -583,7 +552,6 @@
             font-style: italic;
         }
 
-        /* Configuración de Carga */
         .config-section {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 255, 136, 0.03) 100%);
             border: 1px solid rgba(0, 212, 255, 0.2);
@@ -620,7 +588,6 @@
             accent-color: var(--primary);
         }
 
-        /* Disclaimer */
         .disclaimer {
             background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 68, 68, 0.05) 100%);
             border: 1px solid rgba(255, 107, 107, 0.3);
@@ -644,7 +611,6 @@
             font-weight: 600;
         }
 
-        /* Info Footer */
         .info-footer {
             text-align: center;
             font-size: 0.85em;
@@ -653,7 +619,6 @@
             padding: 15px;
         }
 
-        /* Info Box */
         .info-box {
             text-align: center;
             margin-top: 15px;
@@ -670,7 +635,6 @@
             font-weight: 600;
         }
 
-        /* Scrollbar personalizado */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -689,7 +653,6 @@
             background: var(--primary-dark);
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 1.7em;
@@ -699,7 +662,6 @@
                 font-size: 3em;
             }
             
-            .input-group,
             .cost-time-grid {
                 grid-template-columns: 1fr;
             }
@@ -718,7 +680,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
                 <i class="fas fa-sun" id="themeIcon"></i>
@@ -727,7 +688,6 @@
             <p>Monitorea tu vehículo eléctrico de forma inteligente</p>
         </div>
 
-        <!-- Selector de Vehículo -->
         <div class="card">
             <div class="card-title">
                 <i class="fas fa-car"></i>
@@ -739,18 +699,17 @@
                     <div class="vehicle-name">GAC AION ES</div>
                     <small style="opacity: 0.7; font-size: 0.8em;">48.5 kWh</small>
                 </div>
-                <div class="vehicle-option coming-soon" onclick="selectVehicle('model-3')">
+                <div class="vehicle-option coming-soon" onclick="selectVehicle('byd-d1')">
                     <div class="vehicle-icon">🚙</div>
-                    <div class="vehicle-name">Tesla Model 3</div>
+                    <div class="vehicle-name">BYD D1</div>
                 </div>
-                <div class="vehicle-option coming-soon" onclick="selectVehicle('leaf')">
+                <div class="vehicle-option coming-soon" onclick="selectVehicle('byd-e5')">
                     <div class="vehicle-icon">🚘</div>
-                    <div class="vehicle-name">Nissan Leaf</div>
+                    <div class="vehicle-name">BYD E5</div>
                 </div>
             </div>
         </div>
 
-        <!-- Datos Principales -->
         <div class="card">
             <div class="card-title">
                 <i class="fas fa-calculator"></i>
@@ -772,7 +731,6 @@
             </button>
         </div>
 
-        <!-- Configuración de Carga -->
         <div class="card config-section">
             <div class="card-title">
                 <i class="fas fa-plug"></i>
@@ -813,7 +771,6 @@
             </div>
         </div>
 
-        <!-- Resultados -->
         <div class="card result-section" id="resultSection">
             <div class="greeting" id="greeting"></div>
             
@@ -827,7 +784,6 @@
                 <div class="progress-bar" id="progressBar">0%</div>
             </div>
 
-            <!-- Costo y Tiempo -->
             <div class="cost-time-grid">
                 <div class="cost-card">
                     <div class="cost-label"><i class="fas fa-money-bill-wave"></i> Costo aproximado</div>
@@ -843,11 +799,10 @@
 
             <div class="alert" id="alert"></div>
 
-            <!-- Info Box sobre carga realista -->
             <div class="info-box">
                 <i class="fas fa-info-circle"></i> 
                 <strong>Nota:</strong> La carga rápida DC de 30% a 80% toma ~45 min en tu AION ES. 
-                <a href="#" onclick="alert('🔋 La batería carga más rápido entre 20-80%. Por encima de 80%, el BMS reduce la potencia para proteger la batería. Por eso las cargas en ruta suelen ser parciales.')">
+                <a href="#" onclick="alert('🔋 La batería carga más rápido entre 20-80%. Por encima de 80%, el BMS reduce la potencia para proteger la batería.')">
                     ¿Por qué?
                 </a>
             </div>
@@ -857,7 +812,6 @@
             </div>
         </div>
 
-        <!-- Historial -->
         <div class="card history-section">
             <div class="history-header">
                 <h3><i class="fas fa-history"></i> Historial de Registros</h3>
@@ -875,12 +829,10 @@
             </div>
         </div>
 
-        <!-- Info Footer -->
         <div class="info-footer">
             <p><i class="fas fa-info-circle"></i> 100% = 440 km | ⚠️ Recarga recomendada ≤ 150 km</p>
         </div>
 
-        <!-- Disclaimer -->
         <div class="disclaimer">
             <strong><i class="fas fa-shield-alt"></i> AVISO LEGAL</strong>
             Programa desarrollado por <a href="https://niteg.co" target="_blank">niteg.co</a>.<br>
@@ -889,7 +841,6 @@
     </div>
 
     <script>
-        // Configuración de vehículos
         const vehicles = {
             'aion-es': {
                 name: 'GAC AION ES',
@@ -897,17 +848,17 @@
                 maxRange: 440,
                 efficiency: 0.90
             },
-            'model-3': {
-                name: 'Tesla Model 3',
-                batteryCapacity: 60,
-                maxRange: 491,
-                efficiency: 0.92
+            'byd-d1': {
+                name: 'BYD D1',
+                batteryCapacity: 54,
+                maxRange: 410,
+                efficiency: 0.90
             },
-            'leaf': {
-                name: 'Nissan Leaf',
-                batteryCapacity: 40,
-                maxRange: 270,
-                efficiency: 0.88
+            'byd-e5': {
+                name: 'BYD E5',
+                batteryCapacity: 53.6,
+                maxRange: 400,
+                efficiency: 0.90
             }
         };
 
@@ -915,7 +866,6 @@
         let chart = null;
         let history = JSON.parse(localStorage.getItem('batteryHistory')) || [];
 
-        // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
             loadTheme();
             loadTariffPreference();
@@ -923,7 +873,6 @@
             createChart();
         });
 
-        // Cambiar tema
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
@@ -939,7 +888,6 @@
             }
         }
 
-        // Cargar tarifa guardada
         function loadTariffPreference() {
             const saved = localStorage.getItem('userTariff');
             if (saved) {
@@ -947,12 +895,10 @@
             }
         }
 
-        // Guardar tarifa
         function saveTariffPreference(tariff) {
             localStorage.setItem('userTariff', tariff);
         }
 
-        // Seleccionar vehículo
         function selectVehicle(vehicle) {
             if (vehicle !== 'aion-es') {
                 alert('🚗 Próximamente disponible');
@@ -975,14 +921,12 @@
             return "Buenas noches";
         }
 
-        // Cálculo de tiempo de carga REALISTA
         function calculateChargingTime(currentPercent, targetPercent, chargerPower) {
             const vehicle = vehicles[currentVehicle];
             
-            // Carga rápida DC: modelo empírico basado en experiencia real
             if (chargerPower >= 50 && currentPercent >= 20 && targetPercent <= 85) {
-                const typicalMinutes = 45; // 30% → 80% en ~45 min
-                const typicalRange = 50; // 80-30 = 50 puntos porcentuales
+                const typicalMinutes = 45;
+                const typicalRange = 50;
                 const userRange = Math.abs(targetPercent - currentPercent);
                 
                 let estimatedMinutes = (userRange / typicalRange) * typicalMinutes;
@@ -993,10 +937,7 @@
                     method: 'fast-charge',
                     note: '⚡ Carga rápida DC (real)'
                 };
-            }
-            
-            // Carga lenta AC: cálculo teórico (más preciso)
-            else {
+            } else {
                 const capacity = vehicle.batteryCapacity;
                 const efficiency = vehicle.efficiency;
                 const energyNeeded = ((targetPercent - currentPercent) / 100) * capacity / efficiency;
@@ -1017,7 +958,6 @@
             const chargerPower = parseFloat(document.querySelector('input[name="chargerType"]:checked').value);
             const targetLevel = parseInt(document.getElementById('targetLevel').value);
 
-            // Guardar tarifa preferida
             saveTariffPreference(tariff);
 
             if (!name) {
@@ -1038,7 +978,6 @@
                 return;
             }
 
-            // Calcular porcentaje actual
             let percentage = (kmRemaining / vehicle.maxRange) * 100;
             let displayKm = kmRemaining;
 
@@ -1047,22 +986,18 @@
                 displayKm = vehicle.maxRange;
             }
 
-            // Calcular energía y costo
             const currentKwh = (percentage / 100) * vehicle.batteryCapacity;
             const targetKwh = (targetLevel / 100) * vehicle.batteryCapacity;
             const energyNeeded = (targetKwh - currentKwh) / vehicle.efficiency;
             const cost = Math.max(0, energyNeeded * tariff);
             
-            // Calcular tiempo REALISTA
             const chargingInfo = calculateChargingTime(percentage, targetLevel, chargerPower);
 
-            // Mostrar resultados
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('greeting').textContent = `${getGreeting()} ${name}!`;
             document.getElementById('percentage').textContent = `${percentage.toFixed(1)}%`;
             document.getElementById('kmDisplay').textContent = `${displayKm.toFixed(0)} km restantes (${vehicle.name})`;
 
-            // Actualizar barra
             const progressBar = document.getElementById('progressBar');
             progressBar.style.width = `${percentage}%`;
             progressBar.textContent = `${percentage.toFixed(1)}%`;
@@ -1071,7 +1006,6 @@
             if (percentage < 40) progressBar.classList.add('critical');
             else if (percentage < 70) progressBar.classList.add('warning');
 
-            // Mostrar costo y tiempo
             document.getElementById('costValue').textContent = `$${cost.toFixed(2)}`;
             
             const hours = Math.floor(chargingInfo.minutes / 60);
@@ -1084,7 +1018,6 @@
             }
             document.getElementById('timeNote').textContent = chargingInfo.note;
 
-            // Alerta
             const alertBox = document.getElementById('alert');
             alertBox.className = 'alert';
             
@@ -1104,7 +1037,6 @@
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // Historial
         function saveToHistory(name, km, percentage, cost, vehicleName) {
             const record = {
                 id: Date.now(),
@@ -1186,7 +1118,6 @@
             link.click();
         }
 
-        // Gráfica
         function createChart() {
             const ctx = document.getElementById('consumptionChart').getContext('2d');
             const vehicle = vehicles[currentVehicle];
@@ -1203,13 +1134,14 @@
             const textColor = isLight ? '#2d3748' : '#ffffff';
             const gridColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
 
+            // ✅ CORREGIDO: Agregado "data:" antes del objeto
             chart = new Chart(ctx, {
                 type: 'line',
-                 {
+                data: {
                     labels: kmValues,
                     datasets: [{
                         label: 'Autonomía',
-                         percentValues,
+                        data: percentValues,
                         borderColor: '#00d4ff',
                         backgroundColor: 'rgba(0, 212, 255, 0.1)',
                         borderWidth: 3,
@@ -1265,7 +1197,6 @@
             chart.update();
         }
 
-        // Enter para calcular
         document.getElementById('kmInput')?.addEventListener('keypress', e => {
             if (e.key === 'Enter') calculateBattery();
         });
