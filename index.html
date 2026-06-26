@@ -181,7 +181,7 @@
             color: var(--primary);
         }
 
-        input[type="text"], input[type="number"], select {
+        input[type="text"], input[type="number"], input[type="password"], select {
             width: 100%;
             padding: 15px 18px;
             border: 2px solid var(--input-bg-dark);
@@ -429,6 +429,57 @@
         }
         .charging-info strong { color: var(--primary); }
 
+        /* Modal de contraseña */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-content {
+            background: var(--card-bg-dark);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+        }
+
+        .modal-content h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .modal-content p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .modal-content input {
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--input-bg-dark); border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
@@ -492,21 +543,12 @@
                 <input type="number" id="tariffInput" value="7.50" step="0.01" placeholder="7.50">
             </div>
             <div class="form-group">
-                <label><i class="fas fa-charging-station"></i> Tipo de cargador</label>
-                <div class="radio-group">
-                    <label class="radio-option"><input type="radio" name="chargerType" value="7" checked><span>🏠 Casa (7 kW)</span></label>
-                    <label class="radio-option"><input type="radio" name="chargerType" value="22"><span>🏢 Público Nivel 2 (22 kW)</span></label>
-                    <label class="radio-option"><input type="radio" name="chargerType" value="48"><span>⚡ Carga Rápida DC (48 kW)</span></label>
-                    <label class="radio-option"><input type="radio" name="chargerType" value="150"><span>🚀 Super Carga (150 kW)</span></label>
-                </div>
-            </div>
-            <div class="form-group">
                 <label for="targetLevel"><i class="fas fa-bullseye"></i> Nivel objetivo de carga: <span id="targetValue">100</span>%</label>
                 <input type="range" id="targetLevel" min="50" max="100" value="100" step="5" oninput="document.getElementById('targetValue').textContent = this.value">
             </div>
             <div class="charging-info">
-                <i class="fas fa-info-circle"></i>
-                <strong>Nota AION ES:</strong> Tu auto carga a <strong>48 kW hasta 80%</strong> y luego reduce a <strong>28 kW (80-100%)</strong> para proteger la batería.
+                <i class="fas fa-bolt"></i>
+                <strong>Carga Rápida DC:</strong> Tu auto carga a <strong>48 kW hasta 80%</strong> y luego reduce a <strong>28 kW (80-100%)</strong> para proteger la batería.
             </div>
         </div>
 
@@ -527,7 +569,7 @@
                 <div class="time-card">
                     <div class="time-label"><i class="fas fa-clock"></i> Tiempo de carga</div>
                     <div class="time-value" id="timeValue">0h</div>
-                    <small style="opacity: 0.7;" id="timeNote">estimado</small>
+                    <small style="opacity: 0.7;" id="timeNote">Carga rápida DC</small>
                 </div>
             </div>
             <div class="alert" id="alert"></div>
@@ -543,10 +585,10 @@
                 <h3><i class="fas fa-history"></i> Historial de Registros</h3>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <div class="sync-status"><div class="sync-dot"></div><span id="syncText">Sincronizando...</span></div>
-                    <button class="btn btn-secondary btn-small" onclick="exportHistory()" style="margin-right: 10px;">
+                    <button class="btn btn-secondary btn-small" onclick="requestPassword('export')" style="margin-right: 10px;">
                         <i class="fas fa-download"></i> Exportar CSV
                     </button>
-                    <button class="btn btn-small" onclick="clearHistory()" style="background: linear-gradient(135deg, var(--danger) 0%, #ff4444 100%);">
+                    <button class="btn btn-small" onclick="requestPassword('delete')" style="background: linear-gradient(135deg, var(--danger) 0%, #ff4444 100%);">
                         <i class="fas fa-trash"></i> Borrar Todo
                     </button>
                 </div>
@@ -560,6 +602,19 @@
             <strong><i class="fas fa-shield-alt"></i> AVISO LEGAL</strong>
             Programa desarrollado por <a href="https://niteg.co" target="_blank">niteg.co</a>.<br>
             La distribución no autorizada de este programa tendrá consecuencias judiciales.
+        </div>
+    </div>
+
+    <!-- Modal de Contraseña -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-lock"></i> Autenticación Requerida</h3>
+            <p id="modalMessage">Ingresa la contraseña para continuar</p>
+            <input type="password" id="passwordInput" placeholder="Contraseña" onkeypress="if(event.key === 'Enter') verifyPassword()">
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn" onclick="verifyPassword()">Aceptar</button>
+            </div>
         </div>
     </div>
 
@@ -581,6 +636,12 @@
         // ID único para este dispositivo
         const deviceId = localStorage.getItem('deviceId') || ('device_' + Math.random().toString(36).substr(2, 9));
         localStorage.setItem('deviceId', deviceId);
+
+        // 🔐 CONTRASEÑA DE SEGURIDAD
+        const SECURITY_PASSWORD = "Sm170400";
+
+        // Acción pendiente (export o delete)
+        let pendingAction = null;
 
         // Configuración de vehículos
         const vehicles = {
@@ -652,19 +713,55 @@
         }
 
         async function clearHistoryFirebase() {
-            if (confirm('¿Estás seguro de borrar TODO el historial en la nube? Esta acción no se puede deshacer.')) {
-                try {
-                    const snapshot = await db.collection('batteryHistory').get();
-                    const batch = db.batch();
-                    snapshot.forEach(doc => batch.delete(doc.ref));
-                    await batch.commit();
-                    history = [];
-                    renderHistory();
-                    alert('✓ Historial borrado correctamente');
-                } catch (error) {
-                    console.error('Error borrando:', error);
-                    alert('Error al borrar. Inténtalo de nuevo.');
+            try {
+                const snapshot = await db.collection('batteryHistory').get();
+                const batch = db.batch();
+                snapshot.forEach(doc => batch.delete(doc.ref));
+                await batch.commit();
+                history = [];
+                renderHistory();
+                alert('✓ Historial borrado correctamente');
+            } catch (error) {
+                console.error('Error borrando:', error);
+                alert('Error al borrar. Inténtalo de nuevo.');
+            }
+        }
+
+        // 🔐 FUNCIONES DE SEGURIDAD
+        function requestPassword(action) {
+            pendingAction = action;
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
+            
+            if (action === 'export') {
+                document.getElementById('modalMessage').textContent = 'Ingresa la contraseña para exportar el historial';
+            } else {
+                document.getElementById('modalMessage').textContent = '⚠️ ADVERTENCIA: Ingresa la contraseña para BORRAR TODO el historial';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            pendingAction = null;
+        }
+
+        function verifyPassword() {
+            const input = document.getElementById('passwordInput').value;
+            
+            if (input === SECURITY_PASSWORD) {
+                closeModal();
+                if (pendingAction === 'export') {
+                    exportHistory();
+                } else if (pendingAction === 'delete') {
+                    if (confirm('¿Estás SEGURO de borrar TODO el historial? Esta acción no se puede deshacer.')) {
+                        clearHistoryFirebase();
+                    }
                 }
+            } else {
+                alert('❌ Contraseña incorrecta');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
             }
         }
 
@@ -726,12 +823,6 @@
             const curve = vehicle.chargingCurve;
             let totalMinutes = 0;
             
-            if (curve.stage1.power <= 22) {
-                const energyNeeded = ((targetPercent - currentPercent) / 100) * capacity / efficiency;
-                const hours = energyNeeded / curve.stage1.power;
-                return { minutes: Math.round(hours * 60), note: '🏠 Carga AC' };
-            }
-            
             const threshold = curve.stage1.maxPercent;
             const power1 = curve.stage1.power;
             const power2 = curve.stage2.power;
@@ -746,14 +837,13 @@
                 const energyStage2 = ((targetPercent - startStage2) / 100) * capacity / efficiency;
                 totalMinutes += (energyStage2 / power2) * 60;
             }
-            return { minutes: Math.round(totalMinutes), note: '⚡ Carga DC (2 etapas)' };
+            return { minutes: Math.round(totalMinutes), note: '⚡ Carga rápida DC' };
         }
 
         function calculateBattery() {
             const name = document.getElementById('userName').value.trim();
             const kmText = document.getElementById('kmInput').value.trim();
             let inputTariff = parseFloat(document.getElementById('tariffInput').value) || 7.50;
-            const chargerPower = parseFloat(document.querySelector('input[name="chargerType"]:checked').value);
             const targetLevel = parseInt(document.getElementById('targetLevel').value);
 
             saveTariffPreference(inputTariff);
