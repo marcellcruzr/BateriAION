@@ -635,6 +635,19 @@
             font-weight: 600;
         }
 
+        .charging-info {
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.85em;
+        }
+
+        .charging-info strong {
+            color: var(--primary);
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -747,15 +760,15 @@
                 <div class="radio-group">
                     <label class="radio-option">
                         <input type="radio" name="chargerType" value="7" checked>
-                        <span>🏠 Casa (7 kW)</span>
+                        <span> Casa (7 kW)</span>
                     </label>
                     <label class="radio-option">
                         <input type="radio" name="chargerType" value="22">
                         <span>🏢 Público Nivel 2 (22 kW)</span>
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="chargerType" value="50">
-                        <span>⚡ Carga Rápida DC (50 kW)</span>
+                        <input type="radio" name="chargerType" value="48">
+                        <span>⚡ Carga Rápida DC (48 kW)</span>
                     </label>
                     <label class="radio-option">
                         <input type="radio" name="chargerType" value="150">
@@ -768,6 +781,11 @@
                 <label for="targetLevel"><i class="fas fa-bullseye"></i> Nivel objetivo de carga: <span id="targetValue">100</span>%</label>
                 <input type="range" id="targetLevel" min="50" max="100" value="100" step="5" 
                        oninput="document.getElementById('targetValue').textContent = this.value">
+            </div>
+
+            <div class="charging-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Nota AION ES:</strong> Tu auto carga a <strong>48 kW hasta 80%</strong> y luego reduce a <strong>28 kW (80-100%)</strong> para proteger la batería.
             </div>
         </div>
 
@@ -800,11 +818,8 @@
             <div class="alert" id="alert"></div>
 
             <div class="info-box">
-                <i class="fas fa-info-circle"></i> 
-                <strong>Nota:</strong> La carga rápida DC de 30% a 80% toma ~45 min en tu AION ES. 
-                <a href="#" onclick="alert('🔋 La batería carga más rápido entre 20-80%. Por encima de 80%, el BMS reduce la potencia para proteger la batería.')">
-                    ¿Por qué?
-                </a>
+                <i class="fas fa-battery-three-quarters"></i> 
+                <strong>Curva de carga:</strong> 0-80% = 48 kW | 80-100% = 28 kW
             </div>
 
             <div class="chart-container">
@@ -830,7 +845,7 @@
         </div>
 
         <div class="info-footer">
-            <p><i class="fas fa-info-circle"></i> 100% = 440 km | ⚠️ Recarga recomendada ≤ 150 km</p>
+            <p><i class="fas fa-info-circle"></i> 100% = 440 km | ️ Recarga recomendada ≤ 150 km</p>
         </div>
 
         <div class="disclaimer">
@@ -841,24 +856,37 @@
     </div>
 
     <script>
+        // Configuración de vehículos con curva de carga de 2 etapas
         const vehicles = {
             'aion-es': {
                 name: 'GAC AION ES',
                 batteryCapacity: 48.5,
                 maxRange: 440,
-                efficiency: 0.90
+                efficiency: 0.90,
+                chargingCurve: {
+                    stage1: { maxPercent: 80, power: 48 },  // 0-80% a 48 kW
+                    stage2: { maxPercent: 100, power: 28 }   // 80-100% a 28 kW
+                }
             },
             'byd-d1': {
                 name: 'BYD D1',
                 batteryCapacity: 54,
                 maxRange: 410,
-                efficiency: 0.90
+                efficiency: 0.90,
+                chargingCurve: {
+                    stage1: { maxPercent: 80, power: 48 },
+                    stage2: { maxPercent: 100, power: 28 }
+                }
             },
             'byd-e5': {
                 name: 'BYD E5',
                 batteryCapacity: 53.6,
                 maxRange: 400,
-                efficiency: 0.90
+                efficiency: 0.90,
+                chargingCurve: {
+                    stage1: { maxPercent: 80, power: 48 },
+                    stage2: { maxPercent: 100, power: 28 }
+                }
             }
         };
 
@@ -921,34 +949,54 @@
             return "Buenas noches";
         }
 
-        function calculateChargingTime(currentPercent, targetPercent, chargerPower) {
-            const vehicle = vehicles[currentVehicle];
+        // ✅ NUEVO: Cálculo de tiempo con curva de carga de 2 etapas
+        function calculateChargingTime(currentPercent, targetPercent, vehicle) {
+            const capacity = vehicle.batteryCapacity;
+            const efficiency = vehicle.efficiency;
+            const curve = vehicle.chargingCurve;
             
-            if (chargerPower >= 50 && currentPercent >= 20 && targetPercent <= 85) {
-                const typicalMinutes = 45;
-                const typicalRange = 50;
-                const userRange = Math.abs(targetPercent - currentPercent);
-                
-                let estimatedMinutes = (userRange / typicalRange) * typicalMinutes;
-                estimatedMinutes = Math.max(20, Math.min(60, estimatedMinutes));
-                
-                return {
-                    minutes: Math.round(estimatedMinutes),
-                    method: 'fast-charge',
-                    note: '⚡ Carga rápida DC (real)'
-                };
-            } else {
-                const capacity = vehicle.batteryCapacity;
-                const efficiency = vehicle.efficiency;
+            let totalMinutes = 0;
+            let stages = [];
+            
+            // Si el cargador es AC (casa/público nivel 2), usar cálculo simple
+            if (curve.stage1.power <= 22) {
                 const energyNeeded = ((targetPercent - currentPercent) / 100) * capacity / efficiency;
-                const hours = energyNeeded / chargerPower;
-                
+                const hours = energyNeeded / curve.stage1.power;
                 return {
                     minutes: Math.round(hours * 60),
-                    method: 'home-charge',
-                    note: '🏠 Carga AC (teórico)'
+                    note: ' Carga AC',
+                    stages: []
                 };
             }
+            
+            // Carga DC: calcular por etapas
+            const threshold = curve.stage1.maxPercent; // 80%
+            const power1 = curve.stage1.power; // 48 kW
+            const power2 = curve.stage2.power; // 28 kW
+            
+            // Etapa 1: De currentPercent a min(targetPercent, 80%)
+            if (currentPercent < threshold) {
+                const endStage1 = Math.min(targetPercent, threshold);
+                const energyStage1 = ((endStage1 - currentPercent) / 100) * capacity / efficiency;
+                const timeStage1 = (energyStage1 / power1) * 60; // minutos
+                totalMinutes += timeStage1;
+                stages.push({ stage: 1, from: currentPercent, to: endStage1, minutes: timeStage1 });
+            }
+            
+            // Etapa 2: De max(currentPercent, 80%) a targetPercent (si target > 80%)
+            if (targetPercent > threshold) {
+                const startStage2 = Math.max(currentPercent, threshold);
+                const energyStage2 = ((targetPercent - startStage2) / 100) * capacity / efficiency;
+                const timeStage2 = (energyStage2 / power2) * 60; // minutos
+                totalMinutes += timeStage2;
+                stages.push({ stage: 2, from: startStage2, to: targetPercent, minutes: timeStage2 });
+            }
+            
+            return {
+                minutes: Math.round(totalMinutes),
+                note: ' Carga DC (2 etapas)',
+                stages: stages
+            };
         }
 
         function calculateBattery() {
@@ -986,18 +1034,22 @@
                 displayKm = vehicle.maxRange;
             }
 
+            // Calcular energía y costo
             const currentKwh = (percentage / 100) * vehicle.batteryCapacity;
             const targetKwh = (targetLevel / 100) * vehicle.batteryCapacity;
             const energyNeeded = (targetKwh - currentKwh) / vehicle.efficiency;
             const cost = Math.max(0, energyNeeded * tariff);
             
-            const chargingInfo = calculateChargingTime(percentage, targetLevel, chargerPower);
+            // Calcular tiempo con curva de 2 etapas
+            const chargingInfo = calculateChargingTime(percentage, targetLevel, vehicle);
 
+            // Mostrar resultados
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('greeting').textContent = `${getGreeting()} ${name}!`;
             document.getElementById('percentage').textContent = `${percentage.toFixed(1)}%`;
             document.getElementById('kmDisplay').textContent = `${displayKm.toFixed(0)} km restantes (${vehicle.name})`;
 
+            // Actualizar barra
             const progressBar = document.getElementById('progressBar');
             progressBar.style.width = `${percentage}%`;
             progressBar.textContent = `${percentage.toFixed(1)}%`;
@@ -1006,6 +1058,7 @@
             if (percentage < 40) progressBar.classList.add('critical');
             else if (percentage < 70) progressBar.classList.add('warning');
 
+            // Mostrar costo y tiempo
             document.getElementById('costValue').textContent = `$${cost.toFixed(2)}`;
             
             const hours = Math.floor(chargingInfo.minutes / 60);
@@ -1018,6 +1071,7 @@
             }
             document.getElementById('timeNote').textContent = chargingInfo.note;
 
+            // Alerta
             const alertBox = document.getElementById('alert');
             alertBox.className = 'alert';
             
@@ -1033,11 +1087,11 @@
             }
 
             updateChart(kmRemaining, percentage);
-            saveToHistory(name, kmRemaining, percentage, cost, vehicle.name);
+            saveToHistory(name, kmRemaining, percentage, cost, vehicle.name, chargingInfo.minutes);
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        function saveToHistory(name, km, percentage, cost, vehicleName) {
+        function saveToHistory(name, km, percentage, cost, vehicleName, chargingTime) {
             const record = {
                 id: Date.now(),
                 name,
@@ -1045,6 +1099,7 @@
                 percentage,
                 cost,
                 vehicle: vehicleName,
+                chargingTime,
                 date: new Date().toLocaleString('es-ES')
             };
 
@@ -1072,12 +1127,19 @@
                 else if (record.percentage < 70) item.classList.add('warning');
                 else item.classList.add('success');
 
+                const hours = Math.floor(record.chargingTime / 60);
+                const mins = record.chargingTime % 60;
+                const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
+
                 item.innerHTML = `
                     <div class="history-info">
                         <div class="history-name">👤 ${record.name} • ${record.vehicle}</div>
-                        <div class="history-details">📅 ${record.date} | 🛣️ ${record.km.toFixed(0)} km | 💰 $${record.cost.toFixed(2)}</div>
+                        <div class="history-details">📅 ${record.date} | 🛣️ ${record.km.toFixed(0)} km | ⏱️ ${timeStr}</div>
                     </div>
-                    <div class="history-percentage">${record.percentage.toFixed(1)}%</div>
+                    <div>
+                        <div class="history-percentage">${record.percentage.toFixed(1)}%</div>
+                        <div style="text-align: center; font-size: 0.8em; opacity: 0.7;">💰 $${record.cost.toFixed(2)}</div>
+                    </div>
                     <button class="history-delete" onclick="deleteHistoryItem(${record.id})">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -1106,9 +1168,9 @@
                 return;
             }
 
-            let csv = 'Fecha,Nombre,Vehiculo,KM,Porcentaje,Costo (MXN)\n';
+            let csv = 'Fecha,Nombre,Vehiculo,KM,Porcentaje,Costo (MXN),Tiempo (min)\n';
             history.forEach(r => {
-                csv += `${r.date},${r.name},${r.vehicle},${r.km},${r.percentage.toFixed(2)},${r.cost.toFixed(2)}\n`;
+                csv += `${r.date},${r.name},${r.vehicle},${r.km},${r.percentage.toFixed(2)},${r.cost.toFixed(2)},${r.chargingTime}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1134,7 +1196,6 @@
             const textColor = isLight ? '#2d3748' : '#ffffff';
             const gridColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
 
-            // ✅ CORREGIDO: Agregado "data:" antes del objeto
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
