@@ -15,6 +15,10 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
         :root {
             --primary: #00d4ff;
@@ -33,11 +37,7 @@
             --input-bg-light: #e2e8f0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -53,10 +53,7 @@
             color: var(--text-light);
         }
 
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
+        .container { max-width: 700px; margin: 0 auto; }
 
         .header {
             text-align: center;
@@ -80,11 +77,7 @@
             letter-spacing: -0.5px;
         }
 
-        .header p {
-            font-size: 0.95em;
-            opacity: 0.8;
-            font-weight: 300;
-        }
+        .header p { font-size: 0.95em; opacity: 0.8; font-weight: 300; }
 
         .theme-toggle {
             position: absolute;
@@ -158,30 +151,14 @@
             transition: all 0.3s;
         }
 
-        body.light-mode .vehicle-option {
-            background: var(--input-bg-light);
-        }
-
-        .vehicle-option:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .vehicle-option.active {
-            border-color: var(--primary);
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        .vehicle-option.coming-soon {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
+        body.light-mode .vehicle-option { background: var(--input-bg-light); }
+        .vehicle-option:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .vehicle-option.active { border-color: var(--primary); background: rgba(0, 212, 255, 0.1); }
+        .vehicle-option.coming-soon { opacity: 0.5; cursor: not-allowed; }
         .vehicle-option.coming-soon::after {
             content: "Próximamente";
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: var(--primary);
             color: white;
@@ -191,19 +168,10 @@
             font-weight: 600;
         }
 
-        .vehicle-icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
+        .vehicle-icon { font-size: 2.5em; margin-bottom: 10px; }
+        .vehicle-name { font-weight: 500; font-size: 0.95em; }
 
-        .vehicle-name {
-            font-weight: 500;
-            font-size: 0.95em;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
+        .form-group { margin-bottom: 22px; }
 
         label {
             display: block;
@@ -213,9 +181,7 @@
             color: var(--primary);
         }
 
-        input[type="text"],
-        input[type="number"],
-        select {
+        input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 15px 18px;
             border: 2px solid var(--input-bg-dark);
@@ -227,15 +193,13 @@
             transition: all 0.3s;
         }
 
-        body.light-mode input,
-        body.light-mode select {
+        body.light-mode input, body.light-mode select {
             background: var(--input-bg-light);
             border-color: #cbd5e0;
             color: var(--text-light);
         }
 
-        input:focus,
-        select:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
@@ -262,37 +226,14 @@
             box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
+        .btn:active { transform: translateY(0); }
+        .btn-secondary { background: linear-gradient(135deg, #6c757d 0%, #495057 100%); }
+        .btn-small { width: auto; padding: 10px 20px; font-size: 14px; }
 
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-        }
+        .result-section { display: none; animation: slideIn 0.5s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn-small {
-            width: auto;
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-
-        .result-section {
-            display: none;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .greeting {
-            font-size: 1.4em;
-            margin-bottom: 20px;
-            color: var(--success);
-            font-weight: 500;
-        }
+        .greeting { font-size: 1.4em; margin-bottom: 20px; color: var(--success); font-weight: 500; }
 
         .battery-display {
             text-align: center;
@@ -314,11 +255,7 @@
             margin: 10px 0;
         }
 
-        .km-display {
-            font-size: 1.2em;
-            opacity: 0.9;
-            font-weight: 400;
-        }
+        .km-display { font-size: 1.2em; opacity: 0.9; font-weight: 400; }
 
         .progress-container {
             background: var(--input-bg-dark);
@@ -331,9 +268,7 @@
             box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        body.light-mode .progress-container {
-            background: #e2e8f0;
-        }
+        body.light-mode .progress-container { background: #e2e8f0; }
 
         .progress-bar {
             height: 100%;
@@ -352,26 +287,15 @@
         .progress-bar::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             animation: shimmer 2s infinite;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-        .progress-bar.warning {
-            background: linear-gradient(90deg, var(--warning) 0%, #ff9900 100%);
-        }
-
-        .progress-bar.critical {
-            background: linear-gradient(90deg, var(--danger) 0%, #ff4444 100%);
-        }
+        .progress-bar.warning { background: linear-gradient(90deg, var(--warning) 0%, #ff9900 100%); }
+        .progress-bar.critical { background: linear-gradient(90deg, var(--danger) 0%, #ff4444 100%); }
 
         .alert {
             padding: 18px 20px;
@@ -383,36 +307,12 @@
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.85; }
-        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+        .alert.critical { background: rgba(255, 107, 107, 0.15); border-left-color: var(--danger); color: var(--danger); }
+        .alert.warning { background: rgba(255, 204, 0, 0.15); border-left-color: var(--warning); color: #ffb700; }
+        .alert.success { background: rgba(0, 255, 136, 0.15); border-left-color: var(--success); color: var(--success); }
 
-        .alert.critical {
-            background: rgba(255, 107, 107, 0.15);
-            border-left-color: var(--danger);
-            color: var(--danger);
-        }
-
-        .alert.warning {
-            background: rgba(255, 204, 0, 0.15);
-            border-left-color: var(--warning);
-            color: #ffb700;
-        }
-
-        .alert.success {
-            background: rgba(0, 255, 136, 0.15);
-            border-left-color: var(--success);
-            color: var(--success);
-        }
-
-        .cost-time-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
+        .cost-time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
         .cost-card, .time-card {
             padding: 20px;
             background: var(--input-bg-dark);
@@ -420,23 +320,9 @@
             text-align: center;
             border: 2px solid rgba(0, 212, 255, 0.2);
         }
-
-        body.light-mode .cost-card,
-        body.light-mode .time-card {
-            background: var(--input-bg-light);
-        }
-
-        .cost-label, .time-label {
-            font-size: 0.85em;
-            opacity: 0.8;
-            margin-bottom: 8px;
-        }
-
-        .cost-value, .time-value {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: var(--primary);
-        }
+        body.light-mode .cost-card, body.light-mode .time-card { background: var(--input-bg-light); }
+        .cost-label, .time-label { font-size: 0.85em; opacity: 0.8; margin-bottom: 8px; }
+        .cost-value, .time-value { font-size: 1.8em; font-weight: 700; color: var(--primary); }
 
         .chart-container {
             position: relative;
@@ -446,29 +332,23 @@
             background: var(--input-bg-dark);
             border-radius: 15px;
         }
+        body.light-mode .chart-container { background: var(--input-bg-light); }
 
-        body.light-mode .chart-container {
-            background: var(--input-bg-light);
-        }
+        .history-section { margin-top: 25px; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .history-header h3 { color: var(--primary); font-size: 1.2em; font-weight: 600; }
 
-        .history-section {
-            margin-top: 25px;
-        }
-
-        .history-header {
+        .sync-status {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .history-header h3 {
+            gap: 8px;
+            font-size: 0.85em;
+            padding: 8px 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
             color: var(--primary);
-            font-size: 1.2em;
-            font-weight: 600;
         }
+        .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
 
         .history-list {
             max-height: 300px;
@@ -477,10 +357,7 @@
             border-radius: 12px;
             padding: 15px;
         }
-
-        body.light-mode .history-list {
-            background: var(--input-bg-light);
-        }
+        body.light-mode .history-list { background: var(--input-bg-light); }
 
         .history-item {
             display: flex;
@@ -494,99 +371,37 @@
             animation: slideIn 0.3s;
             transition: all 0.3s;
         }
-
-        body.light-mode .history-item {
-            background: #f7fafc;
-        }
-
-        .history-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-        }
-
+        body.light-mode .history-item { background: #f7fafc; }
+        .history-item:hover { transform: translateX(5px); box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2); }
         .history-item.critical { border-left-color: var(--danger); }
         .history-item.warning { border-left-color: var(--warning); }
         .history-item.success { border-left-color: var(--success); }
 
-        .history-info {
-            flex: 1;
-        }
-
-        .history-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .history-details {
-            font-size: 0.8em;
-            opacity: 0.7;
-        }
-
-        .history-percentage {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 0 15px;
-        }
-
+        .history-info { flex: 1; }
+        .history-name { font-weight: 600; margin-bottom: 4px; }
+        .history-details { font-size: 0.8em; opacity: 0.7; }
+        .history-percentage { font-size: 1.5em; font-weight: 700; color: var(--primary); margin: 0 15px; }
         .history-delete {
-            background: none;
-            border: none;
-            color: var(--danger);
-            cursor: pointer;
-            font-size: 18px;
-            padding: 5px;
-            opacity: 0.7;
-            transition: all 0.3s;
+            background: none; border: none; color: var(--danger);
+            cursor: pointer; font-size: 18px; padding: 5px; opacity: 0.7; transition: all 0.3s;
         }
-
-        .history-delete:hover {
-            opacity: 1;
-            transform: scale(1.2);
-        }
-
-        .empty-history {
-            text-align: center;
-            padding: 40px;
-            opacity: 0.6;
-            font-style: italic;
-        }
+        .history-delete:hover { opacity: 1; transform: scale(1.2); }
+        .empty-history { text-align: center; padding: 40px; opacity: 0.6; font-style: italic; }
 
         .config-section {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 255, 136, 0.03) 100%);
             border: 1px solid rgba(0, 212, 255, 0.2);
         }
 
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
+        .radio-group { display: flex; flex-direction: column; gap: 10px; }
         .radio-option {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            background: var(--input-bg-dark);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
+            display: flex; align-items: center; padding: 12px 15px;
+            background: var(--input-bg-dark); border-radius: 10px;
+            cursor: pointer; transition: all 0.3s;
         }
-
-        body.light-mode .radio-option {
-            background: var(--input-bg-light);
-        }
-
-        .radio-option:hover {
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        .radio-option input[type="radio"] {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
-        }
+        body.light-mode .radio-option { background: var(--input-bg-light); }
+        .radio-option:hover { background: rgba(0, 212, 255, 0.1); }
+        .radio-option input[type="radio"] { margin-right: 12px; width: 18px; height: 18px; accent-color: var(--primary); }
 
         .disclaimer {
             background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 68, 68, 0.05) 100%);
@@ -598,96 +413,33 @@
             font-size: 0.85em;
             color: var(--danger);
         }
+        .disclaimer strong { display: block; margin-bottom: 8px; font-size: 1em; }
+        .disclaimer a { color: var(--primary); text-decoration: none; font-weight: 600; }
 
-        .disclaimer strong {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1em;
-        }
-
-        .disclaimer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .info-footer {
-            text-align: center;
-            font-size: 0.85em;
-            opacity: 0.7;
-            margin-top: 25px;
-            padding: 15px;
-        }
-
+        .info-footer { text-align: center; font-size: 0.85em; opacity: 0.7; margin-top: 25px; padding: 15px; }
         .info-box {
-            text-align: center;
-            margin-top: 15px;
-            padding: 12px;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 10px;
-            font-size: 0.85em;
-            opacity: 0.9;
+            text-align: center; margin-top: 15px; padding: 12px;
+            background: rgba(0, 212, 255, 0.1); border-radius: 10px;
+            font-size: 0.85em; opacity: 0.9;
         }
-
-        .info-box a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
+        .info-box a { color: var(--primary); text-decoration: none; font-weight: 600; }
         .charging-info {
-            background: rgba(0, 212, 255, 0.08);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            font-size: 0.85em;
+            background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px; padding: 15px; margin-top: 15px; font-size: 0.85em;
         }
+        .charging-info strong { color: var(--primary); }
 
-        .charging-info strong {
-            color: var(--primary);
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--input-bg-dark);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--input-bg-dark); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
 
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.7em;
-            }
-            
-            .percentage {
-                font-size: 3em;
-            }
-            
-            .cost-time-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .history-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .history-percentage {
-                margin: 0;
-            }
+            .header h1 { font-size: 1.7em; }
+            .percentage { font-size: 3em; }
+            .cost-time-grid { grid-template-columns: 1fr; }
+            .history-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .history-percentage { margin: 0; }
         }
     </style>
 </head>
@@ -702,10 +454,7 @@
         </div>
 
         <div class="card">
-            <div class="card-title">
-                <i class="fas fa-car"></i>
-                Selecciona tu Vehículo
-            </div>
+            <div class="card-title"><i class="fas fa-car"></i> Selecciona tu Vehículo</div>
             <div class="vehicle-selector">
                 <div class="vehicle-option active" onclick="selectVehicle('aion-es')" data-vehicle="aion-es">
                     <div class="vehicle-icon">🚗</div>
@@ -724,65 +473,37 @@
         </div>
 
         <div class="card">
-            <div class="card-title">
-                <i class="fas fa-calculator"></i>
-                Datos de la Batería
-            </div>
-            
+            <div class="card-title"><i class="fas fa-calculator"></i> Datos de la Batería</div>
             <div class="form-group">
                 <label for="userName"><i class="fas fa-user"></i> ¿Cuál es tu nombre?</label>
                 <input type="text" id="userName" placeholder="Ingresa tu nombre">
             </div>
-
             <div class="form-group">
                 <label for="kmInput"><i class="fas fa-road"></i> ¿Cuántos km hay en tu tablero?</label>
                 <input type="number" id="kmInput" placeholder="Ej: 220" step="0.1">
             </div>
-
-            <button class="btn" onclick="calculateBattery()">
-                <i class="fas fa-bolt"></i> Calcular Porcentaje
-            </button>
+            <button class="btn" onclick="calculateBattery()"><i class="fas fa-bolt"></i> Calcular Porcentaje</button>
         </div>
 
         <div class="card config-section">
-            <div class="card-title">
-                <i class="fas fa-plug"></i>
-                Configuración de Carga
-            </div>
-
+            <div class="card-title"><i class="fas fa-plug"></i> Configuración de Carga</div>
             <div class="form-group">
                 <label for="tariffInput"><i class="fas fa-tag"></i> Tarifa eléctrica (MXN/kWh)</label>
                 <input type="number" id="tariffInput" value="7.50" step="0.01" placeholder="7.50">
             </div>
-
             <div class="form-group">
                 <label><i class="fas fa-charging-station"></i> Tipo de cargador</label>
                 <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="chargerType" value="7" checked>
-                        <span> Casa (7 kW)</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="chargerType" value="22">
-                        <span>🏢 Público Nivel 2 (22 kW)</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="chargerType" value="48">
-                        <span>⚡ Carga Rápida DC (48 kW)</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="chargerType" value="150">
-                        <span>🚀 Super Carga (150 kW)</span>
-                    </label>
+                    <label class="radio-option"><input type="radio" name="chargerType" value="7" checked><span>🏠 Casa (7 kW)</span></label>
+                    <label class="radio-option"><input type="radio" name="chargerType" value="22"><span>🏢 Público Nivel 2 (22 kW)</span></label>
+                    <label class="radio-option"><input type="radio" name="chargerType" value="48"><span>⚡ Carga Rápida DC (48 kW)</span></label>
+                    <label class="radio-option"><input type="radio" name="chargerType" value="150"><span>🚀 Super Carga (150 kW)</span></label>
                 </div>
             </div>
-
             <div class="form-group">
                 <label for="targetLevel"><i class="fas fa-bullseye"></i> Nivel objetivo de carga: <span id="targetValue">100</span>%</label>
-                <input type="range" id="targetLevel" min="50" max="100" value="100" step="5" 
-                       oninput="document.getElementById('targetValue').textContent = this.value">
+                <input type="range" id="targetLevel" min="50" max="100" value="100" step="5" oninput="document.getElementById('targetValue').textContent = this.value">
             </div>
-
             <div class="charging-info">
                 <i class="fas fa-info-circle"></i>
                 <strong>Nota AION ES:</strong> Tu auto carga a <strong>48 kW hasta 80%</strong> y luego reduce a <strong>28 kW (80-100%)</strong> para proteger la batería.
@@ -791,17 +512,12 @@
 
         <div class="card result-section" id="resultSection">
             <div class="greeting" id="greeting"></div>
-            
             <div class="battery-display">
                 <div>🔋 Nivel de batería</div>
                 <div class="percentage" id="percentage">0%</div>
                 <div class="km-display" id="kmDisplay">0 km restantes</div>
             </div>
-
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar">0%</div>
-            </div>
-
+            <div class="progress-container"><div class="progress-bar" id="progressBar">0%</div></div>
             <div class="cost-time-grid">
                 <div class="cost-card">
                     <div class="cost-label"><i class="fas fa-money-bill-wave"></i> Costo aproximado</div>
@@ -814,23 +530,19 @@
                     <small style="opacity: 0.7;" id="timeNote">estimado</small>
                 </div>
             </div>
-
             <div class="alert" id="alert"></div>
-
             <div class="info-box">
                 <i class="fas fa-battery-three-quarters"></i> 
                 <strong>Curva de carga:</strong> 0-80% = 48 kW | 80-100% = 28 kW
             </div>
-
-            <div class="chart-container">
-                <canvas id="consumptionChart"></canvas>
-            </div>
+            <div class="chart-container"><canvas id="consumptionChart"></canvas></div>
         </div>
 
         <div class="card history-section">
             <div class="history-header">
                 <h3><i class="fas fa-history"></i> Historial de Registros</h3>
-                <div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="sync-status"><div class="sync-dot"></div><span id="syncText">Sincronizando...</span></div>
                     <button class="btn btn-secondary btn-small" onclick="exportHistory()" style="margin-right: 10px;">
                         <i class="fas fa-download"></i> Exportar CSV
                     </button>
@@ -839,65 +551,128 @@
                     </button>
                 </div>
             </div>
-            <div class="history-list" id="historyList">
-                <div class="empty-history">No hay registros aún</div>
-            </div>
+            <div class="history-list" id="historyList"><div class="empty-history">Cargando historial...</div></div>
         </div>
 
-        <div class="info-footer">
-            <p><i class="fas fa-info-circle"></i> 100% = 440 km | ️ Recarga recomendada ≤ 150 km</p>
-        </div>
+        <div class="info-footer"><p><i class="fas fa-info-circle"></i> 100% = 440 km | ⚠️ Recarga recomendada ≤ 150 km</p></div>
 
         <div class="disclaimer">
             <strong><i class="fas fa-shield-alt"></i> AVISO LEGAL</strong>
             Programa desarrollado por <a href="https://niteg.co" target="_blank">niteg.co</a>.<br>
-            La distribución del mismo sin consentimiento será castigada.
+            La distribución no autorizada de este programa tendrá consecuencias judiciales.
         </div>
     </div>
 
     <script>
-        // Configuración de vehículos con curva de carga de 2 etapas
+        // 🔥 TUS CREDENCIALES DE FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyBukGWJMQy_C41RUQVQpMV6njamYulpEqM",
+            authDomain: "bateriaion-1340f.firebaseapp.com",
+            projectId: "bateriaion-1340f",
+            storageBucket: "bateriaion-1340f.firebasestorage.app",
+            messagingSenderId: "317992837332",
+            appId: "1:317992837332:web:be385e4ce0d0d13b319b41"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ID único para este dispositivo
+        const deviceId = localStorage.getItem('deviceId') || ('device_' + Math.random().toString(36).substr(2, 9));
+        localStorage.setItem('deviceId', deviceId);
+
+        // Configuración de vehículos
         const vehicles = {
             'aion-es': {
                 name: 'GAC AION ES',
                 batteryCapacity: 48.5,
                 maxRange: 440,
                 efficiency: 0.90,
-                chargingCurve: {
-                    stage1: { maxPercent: 80, power: 48 },  // 0-80% a 48 kW
-                    stage2: { maxPercent: 100, power: 28 }   // 80-100% a 28 kW
-                }
+                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } }
             },
             'byd-d1': {
                 name: 'BYD D1',
                 batteryCapacity: 54,
                 maxRange: 410,
                 efficiency: 0.90,
-                chargingCurve: {
-                    stage1: { maxPercent: 80, power: 48 },
-                    stage2: { maxPercent: 100, power: 28 }
-                }
+                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } }
             },
             'byd-e5': {
                 name: 'BYD E5',
                 batteryCapacity: 53.6,
                 maxRange: 400,
                 efficiency: 0.90,
-                chargingCurve: {
-                    stage1: { maxPercent: 80, power: 48 },
-                    stage2: { maxPercent: 100, power: 28 }
-                }
+                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } }
             }
         };
 
         let currentVehicle = 'aion-es';
         let chart = null;
-        let history = JSON.parse(localStorage.getItem('batteryHistory')) || [];
+        let history = [];
+        let tariff = 7.50;
 
+        // 📡 FUNCIONES DE FIREBASE
+        async function loadHistoryFromFirebase() {
+            try {
+                document.getElementById('syncText').textContent = 'Sincronizando...';
+                const snapshot = await db.collection('batteryHistory').orderBy('timestamp', 'desc').limit(50).get();
+                history = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    history.push({ id: doc.id, ...data });
+                });
+                renderHistory();
+                document.getElementById('syncText').textContent = '✓ Sincronizado';
+            } catch (error) {
+                console.error('Error cargando historial:', error);
+                document.getElementById('syncText').textContent = '⚠ Error sincronización';
+            }
+        }
+
+        async function saveToFirebase(record) {
+            try {
+                await db.collection('batteryHistory').add({
+                    ...record,
+                    deviceId: deviceId,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                loadHistoryFromFirebase();
+            } catch (error) {
+                console.error('Error guardando en Firebase:', error);
+                saveToLocalStorage(record);
+            }
+        }
+
+        function saveToLocalStorage(record) {
+            const localHistory = JSON.parse(localStorage.getItem('batteryHistory_local')) || [];
+            localHistory.unshift(record);
+            if (localHistory.length > 50) localHistory = localHistory.slice(0, 50);
+            localStorage.setItem('batteryHistory_local', JSON.stringify(localHistory));
+        }
+
+        async function clearHistoryFirebase() {
+            if (confirm('¿Estás seguro de borrar TODO el historial en la nube? Esta acción no se puede deshacer.')) {
+                try {
+                    const snapshot = await db.collection('batteryHistory').get();
+                    const batch = db.batch();
+                    snapshot.forEach(doc => batch.delete(doc.ref));
+                    await batch.commit();
+                    history = [];
+                    renderHistory();
+                    alert('✓ Historial borrado correctamente');
+                } catch (error) {
+                    console.error('Error borrando:', error);
+                    alert('Error al borrar. Inténtalo de nuevo.');
+                }
+            }
+        }
+
+        // 🎨 FUNCIONES DE INTERFAZ
         document.addEventListener('DOMContentLoaded', () => {
             loadTheme();
             loadTariffPreference();
-            renderHistory();
+            loadHistoryFromFirebase();
             createChart();
         });
 
@@ -919,26 +694,22 @@
         function loadTariffPreference() {
             const saved = localStorage.getItem('userTariff');
             if (saved) {
-                document.getElementById('tariffInput').value = saved;
+                tariff = parseFloat(saved);
+                document.getElementById('tariffInput').value = tariff;
             }
         }
 
-        function saveTariffPreference(tariff) {
-            localStorage.setItem('userTariff', tariff);
+        function saveTariffPreference(newTariff) {
+            localStorage.setItem('userTariff', newTariff);
+            tariff = newTariff;
         }
 
         function selectVehicle(vehicle) {
-            if (vehicle !== 'aion-es') {
-                alert('🚗 Próximamente disponible');
-                return;
-            }
-            
+            if (vehicle !== 'aion-es') { alert('🚗 Próximamente disponible'); return; }
             currentVehicle = vehicle;
             document.querySelectorAll('.vehicle-option').forEach(opt => {
                 opt.classList.remove('active');
-                if (opt.dataset.vehicle === vehicle) {
-                    opt.classList.add('active');
-                }
+                if (opt.dataset.vehicle === vehicle) opt.classList.add('active');
             });
         }
 
@@ -949,132 +720,81 @@
             return "Buenas noches";
         }
 
-        // ✅ NUEVO: Cálculo de tiempo con curva de carga de 2 etapas
         function calculateChargingTime(currentPercent, targetPercent, vehicle) {
             const capacity = vehicle.batteryCapacity;
             const efficiency = vehicle.efficiency;
             const curve = vehicle.chargingCurve;
-            
             let totalMinutes = 0;
-            let stages = [];
             
-            // Si el cargador es AC (casa/público nivel 2), usar cálculo simple
             if (curve.stage1.power <= 22) {
                 const energyNeeded = ((targetPercent - currentPercent) / 100) * capacity / efficiency;
                 const hours = energyNeeded / curve.stage1.power;
-                return {
-                    minutes: Math.round(hours * 60),
-                    note: ' Carga AC',
-                    stages: []
-                };
+                return { minutes: Math.round(hours * 60), note: '🏠 Carga AC' };
             }
             
-            // Carga DC: calcular por etapas
-            const threshold = curve.stage1.maxPercent; // 80%
-            const power1 = curve.stage1.power; // 48 kW
-            const power2 = curve.stage2.power; // 28 kW
+            const threshold = curve.stage1.maxPercent;
+            const power1 = curve.stage1.power;
+            const power2 = curve.stage2.power;
             
-            // Etapa 1: De currentPercent a min(targetPercent, 80%)
             if (currentPercent < threshold) {
                 const endStage1 = Math.min(targetPercent, threshold);
                 const energyStage1 = ((endStage1 - currentPercent) / 100) * capacity / efficiency;
-                const timeStage1 = (energyStage1 / power1) * 60; // minutos
-                totalMinutes += timeStage1;
-                stages.push({ stage: 1, from: currentPercent, to: endStage1, minutes: timeStage1 });
+                totalMinutes += (energyStage1 / power1) * 60;
             }
-            
-            // Etapa 2: De max(currentPercent, 80%) a targetPercent (si target > 80%)
             if (targetPercent > threshold) {
                 const startStage2 = Math.max(currentPercent, threshold);
                 const energyStage2 = ((targetPercent - startStage2) / 100) * capacity / efficiency;
-                const timeStage2 = (energyStage2 / power2) * 60; // minutos
-                totalMinutes += timeStage2;
-                stages.push({ stage: 2, from: startStage2, to: targetPercent, minutes: timeStage2 });
+                totalMinutes += (energyStage2 / power2) * 60;
             }
-            
-            return {
-                minutes: Math.round(totalMinutes),
-                note: ' Carga DC (2 etapas)',
-                stages: stages
-            };
+            return { minutes: Math.round(totalMinutes), note: '⚡ Carga DC (2 etapas)' };
         }
 
         function calculateBattery() {
             const name = document.getElementById('userName').value.trim();
             const kmText = document.getElementById('kmInput').value.trim();
-            let tariff = parseFloat(document.getElementById('tariffInput').value) || 7.50;
+            let inputTariff = parseFloat(document.getElementById('tariffInput').value) || 7.50;
             const chargerPower = parseFloat(document.querySelector('input[name="chargerType"]:checked').value);
             const targetLevel = parseInt(document.getElementById('targetLevel').value);
 
-            saveTariffPreference(tariff);
+            saveTariffPreference(inputTariff);
 
-            if (!name) {
-                alert('⚠️ Por favor, ingresa tu nombre');
-                return;
-            }
-
-            if (!kmText) {
-                alert('⚠️ Por favor, ingresa los kilómetros restantes');
-                return;
-            }
+            if (!name) { alert('⚠️ Por favor, ingresa tu nombre'); return; }
+            if (!kmText) { alert('⚠️ Por favor, ingresa los kilómetros restantes'); return; }
 
             const kmRemaining = parseFloat(kmText);
             const vehicle = vehicles[currentVehicle];
-
-            if (kmRemaining < 0) {
-                alert('❌ Los kilómetros no pueden ser negativos');
-                return;
-            }
+            if (kmRemaining < 0) { alert('❌ Los kilómetros no pueden ser negativos'); return; }
 
             let percentage = (kmRemaining / vehicle.maxRange) * 100;
             let displayKm = kmRemaining;
+            if (kmRemaining > vehicle.maxRange) { percentage = 100; displayKm = vehicle.maxRange; }
 
-            if (kmRemaining > vehicle.maxRange) {
-                percentage = 100;
-                displayKm = vehicle.maxRange;
-            }
-
-            // Calcular energía y costo
             const currentKwh = (percentage / 100) * vehicle.batteryCapacity;
             const targetKwh = (targetLevel / 100) * vehicle.batteryCapacity;
             const energyNeeded = (targetKwh - currentKwh) / vehicle.efficiency;
-            const cost = Math.max(0, energyNeeded * tariff);
-            
-            // Calcular tiempo con curva de 2 etapas
+            const cost = Math.max(0, energyNeeded * inputTariff);
             const chargingInfo = calculateChargingTime(percentage, targetLevel, vehicle);
 
-            // Mostrar resultados
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('greeting').textContent = `${getGreeting()} ${name}!`;
             document.getElementById('percentage').textContent = `${percentage.toFixed(1)}%`;
             document.getElementById('kmDisplay').textContent = `${displayKm.toFixed(0)} km restantes (${vehicle.name})`;
 
-            // Actualizar barra
             const progressBar = document.getElementById('progressBar');
             progressBar.style.width = `${percentage}%`;
             progressBar.textContent = `${percentage.toFixed(1)}%`;
             progressBar.className = 'progress-bar';
-            
             if (percentage < 40) progressBar.classList.add('critical');
             else if (percentage < 70) progressBar.classList.add('warning');
 
-            // Mostrar costo y tiempo
             document.getElementById('costValue').textContent = `$${cost.toFixed(2)}`;
-            
             const hours = Math.floor(chargingInfo.minutes / 60);
             const minutes = chargingInfo.minutes % 60;
-            
-            if (hours > 0) {
-                document.getElementById('timeValue').textContent = `${hours}h ${minutes}m`;
-            } else {
-                document.getElementById('timeValue').textContent = `${minutes} min`;
-            }
+            document.getElementById('timeValue').textContent = hours > 0 ? `${hours}h ${minutes}m` : `${minutes} min`;
             document.getElementById('timeNote').textContent = chargingInfo.note;
 
-            // Alerta
             const alertBox = document.getElementById('alert');
             alertBox.className = 'alert';
-            
             if (kmRemaining <= 150) {
                 alertBox.classList.add('critical');
                 alertBox.innerHTML = `⚠️ ¡Batería baja!<br>Te recomendamos conectar a carga pronto.<br>Con ${kmRemaining.toFixed(0)} km restantes, evita trayectos largos.`;
@@ -1087,42 +807,20 @@
             }
 
             updateChart(kmRemaining, percentage);
-            saveToHistory(name, kmRemaining, percentage, cost, vehicle.name, chargingInfo.minutes);
+            saveToFirebase({ name, km: kmRemaining, percentage, cost, vehicle: vehicle.name, chargingTime: chargingInfo.minutes, date: new Date().toLocaleString('es-ES') });
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function saveToHistory(name, km, percentage, cost, vehicleName, chargingTime) {
-            const record = {
-                id: Date.now(),
-                name,
-                km,
-                percentage,
-                cost,
-                vehicle: vehicleName,
-                chargingTime,
-                date: new Date().toLocaleString('es-ES')
-            };
-
-            history.unshift(record);
-            if (history.length > 20) history = history.slice(0, 20);
-            
-            localStorage.setItem('batteryHistory', JSON.stringify(history));
-            renderHistory();
         }
 
         function renderHistory() {
             const historyList = document.getElementById('historyList');
-
             if (history.length === 0) {
                 historyList.innerHTML = '<div class="empty-history"><i class="fas fa-inbox"></i><br>No hay registros aún</div>';
                 return;
             }
-
             historyList.innerHTML = '';
             history.forEach(record => {
                 const item = document.createElement('div');
                 item.className = 'history-item';
-                
                 if (record.percentage < 40) item.classList.add('critical');
                 else if (record.percentage < 70) item.classList.add('warning');
                 else item.classList.add('success');
@@ -1140,60 +838,49 @@
                         <div class="history-percentage">${record.percentage.toFixed(1)}%</div>
                         <div style="text-align: center; font-size: 0.8em; opacity: 0.7;">💰 $${record.cost.toFixed(2)}</div>
                     </div>
-                    <button class="history-delete" onclick="deleteHistoryItem(${record.id})">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <button class="history-delete" onclick="deleteHistoryItem('${record.id}')"><i class="fas fa-trash"></i></button>
                 `;
                 historyList.appendChild(item);
             });
         }
 
-        function deleteHistoryItem(id) {
-            history = history.filter(r => r.id !== id);
-            localStorage.setItem('batteryHistory', JSON.stringify(history));
-            renderHistory();
-        }
-
-        function clearHistory() {
-            if (confirm('¿Estás seguro de borrar todo el historial?')) {
-                history = [];
-                localStorage.setItem('batteryHistory', JSON.stringify(history));
-                renderHistory();
+        async function deleteHistoryItem(id) {
+            if (confirm('¿Borrar este registro?')) {
+                try {
+                    await db.collection('batteryHistory').doc(id).delete();
+                    loadHistoryFromFirebase();
+                } catch (error) {
+                    console.error('Error borrando:', error);
+                    alert('Error al borrar. Inténtalo de nuevo.');
+                }
             }
         }
 
+        function clearHistory() { clearHistoryFirebase(); }
+
         function exportHistory() {
-    if (history.length === 0) {
-        alert('No hay datos para exportar');
-        return;
-    }
-
-    // ✅ Encabezados en el orden CORRECTO
-    let csv = 'Fecha,Nombre,Vehiculo,KM,Porcentaje,Tiempo (min),Costo (MXN)\n';
-    history.forEach(r => {
-        // ✅ Datos en el mismo orden que los encabezados
-        csv += `${r.date},${r.name},${r.vehicle},${r.km},${r.percentage.toFixed(2)},${r.chargingTime},${r.cost.toFixed(2)}\n`;
-    });
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `historial_bateria_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-}
+            if (history.length === 0) { alert('No hay datos para exportar'); return; }
+            let csv = 'Fecha;Nombre;Vehiculo;KM;Porcentaje;Tiempo (min);Costo (MXN)\n';
+            history.forEach(r => {
+                const tiempo = r.chargingTime !== undefined ? Math.round(r.chargingTime) : 'N/A';
+                const costo = r.cost !== undefined ? r.cost.toFixed(2) : '0.00';
+                csv += `${r.date};${r.name};${r.vehicle};${r.km};${r.percentage.toFixed(2)};${tiempo};${costo}\n`;
+            });
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `historial_bateria_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
 
         function createChart() {
             const ctx = document.getElementById('consumptionChart').getContext('2d');
             const vehicle = vehicles[currentVehicle];
-            
-            const kmValues = [];
-            const percentValues = [];
-            
+            const kmValues = [], percentValues = [];
             for (let km = 0; km <= vehicle.maxRange; km += 20) {
                 kmValues.push(km);
                 percentValues.push((km / vehicle.maxRange) * 100);
             }
-
             const isLight = document.body.classList.contains('light-mode');
             const textColor = isLight ? '#2d3748' : '#ffffff';
             const gridColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
@@ -1207,48 +894,24 @@
                         data: percentValues,
                         borderColor: '#00d4ff',
                         backgroundColor: 'rgba(0, 212, 255, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 0
+                        borderWidth: 3, fill: true, tension: 0.4, pointRadius: 0
                     }, {
                         label: 'Tu nivel',
                         data: [],
                         backgroundColor: '#00ff88',
                         borderColor: '#ffffff',
-                        borderWidth: 2,
-                        pointRadius: 8,
-                        pointHoverRadius: 10,
-                        showLine: false
+                        borderWidth: 2, pointRadius: 8, pointHoverRadius: 10, showLine: false
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            labels: { color: textColor, font: { size: 11 } }
-                        },
-                        title: {
-                            display: true,
-                            text: '📊 Gráfica de Consumo',
-                            color: '#00d4ff',
-                            font: { size: 14, weight: 'bold' }
-                        }
+                        legend: { labels: { color: textColor, font: { size: 11 } } },
+                        title: { display: true, text: '📊 Gráfica de Consumo', color: '#00d4ff', font: { size: 14, weight: 'bold' } }
                     },
                     scales: {
-                        x: {
-                            title: { display: true, text: 'Kilómetros', color: textColor },
-                            grid: { color: gridColor },
-                            ticks: { color: textColor }
-                        },
-                        y: {
-                            min: 0,
-                            max: 105,
-                            title: { display: true, text: 'Porcentaje (%)', color: textColor },
-                            grid: { color: gridColor },
-                            ticks: { color: textColor }
-                        }
+                        x: { title: { display: true, text: 'Kilómetros', color: textColor }, grid: { color: gridColor }, ticks: { color: textColor } },
+                        y: { min: 0, max: 105, title: { display: true, text: 'Porcentaje (%)', color: textColor }, grid: { color: gridColor }, ticks: { color: textColor } }
                     }
                 }
             });
@@ -1260,9 +923,7 @@
             chart.update();
         }
 
-        document.getElementById('kmInput')?.addEventListener('keypress', e => {
-            if (e.key === 'Enter') calculateBattery();
-        });
+        document.getElementById('kmInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') calculateBattery(); });
     </script>
 </body>
 </html>
