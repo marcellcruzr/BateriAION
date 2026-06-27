@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <style>
         :root {
@@ -47,112 +44,6 @@
         }
 
         .container { max-width: 700px; margin: 0 auto; }
-
-        /* Login Screen */
-        .login-screen {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .login-card {
-            background: var(--card-bg-dark);
-            padding: 50px;
-            border-radius: 20px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            border: 2px solid var(--primary);
-            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
-        }
-
-        .login-card h2 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.8em;
-        }
-
-        .login-card p { opacity: 0.7; margin-bottom: 30px; }
-
-        .login-card input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 2px solid var(--input-bg-dark);
-            border-radius: 12px;
-            background: var(--input-bg-dark);
-            color: var(--text-dark);
-            font-size: 15px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .login-card input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
-        }
-
-        .login-card .btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .login-error {
-            background: rgba(255, 107, 107, 0.2);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .app-content { display: none; }
-        .app-content.active { display: block; }
-
-        .user-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-        }
-
-        .user-info { display: flex; align-items: center; gap: 10px; }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-        }
-
-        .user-email { font-size: 0.9em; opacity: 0.9; }
-
-        .logout-btn {
-            background: rgba(255, 107, 107, 0.2);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85em;
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover { background: rgba(255, 107, 107, 0.3); }
 
         .header {
             text-align: center;
@@ -192,10 +83,7 @@
             transition: all 0.3s;
         }
 
-        .theme-toggle:hover {
-            transform: rotate(180deg);
-            background: rgba(0, 212, 255, 0.3);
-        }
+        .theme-toggle:hover { transform: rotate(180deg); background: rgba(0, 212, 255, 0.3); }
 
         .card {
             background: var(--card-bg-dark);
@@ -236,6 +124,7 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.3s;
+            position: relative;
         }
 
         body.light-mode .vehicle-option { background: var(--input-bg-light); }
@@ -257,6 +146,7 @@
 
         .vehicle-icon { font-size: 2.5em; margin-bottom: 10px; }
         .vehicle-name { font-weight: 500; font-size: 0.95em; }
+        .vehicle-specs { font-size: 0.75em; opacity: 0.7; margin-top: 5px; }
 
         .form-group { margin-bottom: 22px; }
 
@@ -268,7 +158,7 @@
             color: var(--primary);
         }
 
-        input[type="text"], input[type="number"], input[type="email"], input[type="password"] {
+        input[type="text"], input[type="number"], input[type="password"] {
             width: 100%;
             padding: 15px 18px;
             border: 2px solid var(--input-bg-dark);
@@ -307,11 +197,7 @@
             margin-bottom: 12px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
-        }
-
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4); }
         .btn-secondary { background: linear-gradient(135deg, #6c757d 0%, #495057 100%); }
         .btn-small { width: auto; padding: 10px 20px; font-size: 14px; }
 
@@ -527,35 +413,7 @@
     </style>
 </head>
 <body>
-    <!-- 🔐 PANTALLA DE LOGIN -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-card">
-            <h2><i class="fas fa-lock"></i> Acceso Restringido</h2>
-            <p>Solo personal autorizado de niteg.co</p>
-            <div class="login-error" id="loginError"></div>
-            <input type="email" id="loginEmail" placeholder="Correo electrónico">
-            <input type="password" id="loginPassword" placeholder="Contraseña">
-            <button class="btn" onclick="login()">
-                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
-            </button>
-        </div>
-    </div>
-
-    <!-- 📱 CONTENIDO DE LA APP -->
-    <div class="container app-content" id="appContent">
-        <div class="user-bar">
-            <div class="user-info">
-                <div class="user-avatar" id="userAvatar">M</div>
-                <div>
-                    <div style="font-weight: 600;" id="userEmail">usuario@niteg.co</div>
-                    <div style="font-size: 0.8em; opacity: 0.7;">Sesión activa</div>
-                </div>
-            </div>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </button>
-        </div>
-
+    <div class="container">
         <div class="header">
             <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
                 <i class="fas fa-sun" id="themeIcon"></i>
@@ -570,11 +428,12 @@
                 <div class="vehicle-option active" onclick="selectVehicle('aion-es')" data-vehicle="aion-es">
                     <div class="vehicle-icon">🚗</div>
                     <div class="vehicle-name">GAC AION ES</div>
-                    <small style="opacity: 0.7; font-size: 0.8em;">48.5 kWh</small>
+                    <div class="vehicle-specs">48.5 kWh • 440 km</div>
                 </div>
-                <div class="vehicle-option coming-soon" onclick="selectVehicle('byd-d1')">
+                <div class="vehicle-option" onclick="selectVehicle('byd-d1')" data-vehicle="byd-d1">
                     <div class="vehicle-icon">🚙</div>
                     <div class="vehicle-name">BYD D1</div>
+                    <div class="vehicle-specs">54.0 kWh • 410 km • 62 kW DC</div>
                 </div>
                 <div class="vehicle-option coming-soon" onclick="selectVehicle('byd-e5')">
                     <div class="vehicle-icon">🚘</div>
@@ -606,9 +465,9 @@
                 <label for="targetLevel"><i class="fas fa-bullseye"></i> Nivel objetivo de carga: <span id="targetValue">100</span>%</label>
                 <input type="range" id="targetLevel" min="50" max="100" value="100" step="5" oninput="document.getElementById('targetValue').textContent = this.value">
             </div>
-            <div class="charging-info">
+            <div class="charging-info" id="chargingInfo">
                 <i class="fas fa-bolt"></i>
-                <strong>Carga Rápida DC:</strong> Tu auto carga a <strong>48 kW hasta 80%</strong> y luego reduce a <strong>28 kW (80-100%)</strong> para proteger la batería.
+                <strong>Carga Rápida DC (AION ES):</strong> 48 kW hasta 80% → 28 kW (80-100%)
             </div>
         </div>
 
@@ -635,7 +494,7 @@
             <div class="alert" id="alert"></div>
             <div class="info-box">
                 <i class="fas fa-battery-three-quarters"></i> 
-                <strong>Curva de carga:</strong> 0-80% = 48 kW | 80-100% = 28 kW
+                <strong id="curveInfo">Curva de carga:</strong> <span id="curveValues">0-80% = 48 kW | 80-100% = 28 kW</span>
             </div>
             <div class="chart-container"><canvas id="consumptionChart"></canvas></div>
         </div>
@@ -644,7 +503,7 @@
             <div class="history-header">
                 <h3><i class="fas fa-history"></i> Historial de Registros</h3>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <div class="sync-status"><div class="sync-dot"></div><span id="syncText">Sincronizando...</span></div>
+                    <div class="sync-status"><div class="sync-dot"></div><span id="syncText">LocalStorage</span></div>
                     <button class="btn btn-secondary btn-small" onclick="requestPassword('export')" style="margin-right: 10px;">
                         <i class="fas fa-download"></i> Exportar CSV
                     </button>
@@ -653,10 +512,10 @@
                     </button>
                 </div>
             </div>
-            <div class="history-list" id="historyList"><div class="empty-history">Cargando historial...</div></div>
+            <div class="history-list" id="historyList"><div class="empty-history">Sin registros aún</div></div>
         </div>
 
-        <div class="info-footer"><p><i class="fas fa-info-circle"></i> 100% = 440 km | ⚠️ Recarga recomendada ≤ 150 km</p></div>
+        <div class="info-footer"><p><i class="fas fa-info-circle"></i> 100% = autonomía del vehículo seleccionado</p></div>
 
         <div class="disclaimer">
             <strong><i class="fas fa-shield-alt"></i> AVISO LEGAL</strong>
@@ -679,168 +538,53 @@
     </div>
 
     <script>
-        // 🔥 TUS CREDENCIALES DE FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyBukGWJMQy_C41RUQVQpMV6njamYulpEqM",
-            authDomain: "bateriaion-1340f.firebaseapp.com",
-            projectId: "bateriaion-1340f",
-            storageBucket: "bateriaion-1340f.firebasestorage.app",
-            messagingSenderId: "317992837332",
-            appId: "1:317992837332:web:be385e4ce0d0d13b319b41"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        const SECURITY_PASSWORD = "Sm170400";
-        let pendingAction = null;
-        let currentUser = null;
-
-        // Configuración de vehículos
+        // 🔋 CONFIGURACIÓN DE VEHÍCULOS
         const vehicles = {
             'aion-es': {
                 name: 'GAC AION ES',
                 batteryCapacity: 48.5,
                 maxRange: 440,
                 efficiency: 0.90,
-                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } }
+                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } },
+                chargingInfo: '48 kW hasta 80% → 28 kW (80-100%)'
             },
             'byd-d1': {
                 name: 'BYD D1',
-                batteryCapacity: 54,
+                batteryCapacity: 54.0,  // Calculado desde manual: Blade Battery
                 maxRange: 410,
                 efficiency: 0.90,
-                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } }
+                // Datos del cargador: 62.0 kW @ 428.1V, 144.8A
+                chargingCurve: { stage1: { maxPercent: 80, power: 62 }, stage2: { maxPercent: 100, power: 28 } },
+                chargingInfo: '62 kW hasta 80% → 28 kW (80-100%)'
             },
             'byd-e5': {
                 name: 'BYD E5',
                 batteryCapacity: 53.6,
                 maxRange: 400,
                 efficiency: 0.90,
-                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } }
+                chargingCurve: { stage1: { maxPercent: 80, power: 48 }, stage2: { maxPercent: 100, power: 28 } },
+                chargingInfo: '48 kW hasta 80% → 28 kW (80-100%)'
             }
         };
 
         let currentVehicle = 'aion-es';
         let chart = null;
-        let history = [];
+        let history = JSON.parse(localStorage.getItem('batteryHistory')) || [];
         let tariff = 7.50;
-
-        // 🔐 AUTENTICACIÓN
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('appContent').classList.add('active');
-                document.getElementById('userEmail').textContent = user.email;
-                document.getElementById('userAvatar').textContent = user.email.charAt(0).toUpperCase();
-                loadHistoryFromFirebase();
-            } else {
-                currentUser = null;
-                document.getElementById('loginScreen').style.display = 'flex';
-                document.getElementById('appContent').classList.remove('active');
-            }
-        });
-
-        function login() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const errorDiv = document.getElementById('loginError');
-
-            if (!email || !password) {
-                errorDiv.textContent = '⚠️ Ingresa correo y contraseña';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => { errorDiv.style.display = 'none'; })
-                .catch(error => {
-                    let message = '❌ Error de autenticación';
-                    if (error.code === 'auth/wrong-password') message = '❌ Contraseña incorrecta';
-                    if (error.code === 'auth/user-not-found') message = '❌ Usuario no encontrado';
-                    errorDiv.textContent = message;
-                    errorDiv.style.display = 'block';
-                });
-        }
-
-        function logout() {
-            if (confirm('¿Cerrar sesión?')) {
-                auth.signOut();
-            }
-        }
-
-        // 📡 FIREBASE - Datos LEGIBLES (sin encriptar)
-        async function loadHistoryFromFirebase() {
-            if (!currentUser) return;
-            try {
-                document.getElementById('syncText').textContent = 'Sincronizando...';
-                const snapshot = await db.collection('batteryHistory')
-                    .orderBy('timestamp', 'desc')
-                    .limit(50)
-                    .get();
-                history = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    // ✅ Datos legibles - SIN encriptación
-                    history.push({ id: doc.id, ...data });
-                });
-                renderHistory();
-                document.getElementById('syncText').textContent = '✓ Sincronizado';
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('syncText').textContent = '⚠ Error';
-            }
-        }
-
-        async function saveToFirebase(record) {
-            if (!currentUser) return;
-            try {
-                // ✅ Guardar datos legibles - SIN encriptar
-                await db.collection('batteryHistory').add({
-                    name: record.name,
-                    km: record.km,
-                    percentage: record.percentage,
-                    cost: record.cost,
-                    vehicle: record.vehicle,
-                    chargingTime: record.chargingTime,
-                    date: record.date,
-                    userId: currentUser.uid,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                loadHistoryFromFirebase();
-            } catch (error) {
-                console.error('Error guardando:', error);
-            }
-        }
-
-        async function clearHistoryFirebase() {
-            if (!currentUser) return;
-            try {
-                const snapshot = await db.collection('batteryHistory')
-                    .where('userId', '==', currentUser.uid)
-                    .get();
-                const batch = db.batch();
-                snapshot.forEach(doc => batch.delete(doc.ref));
-                await batch.commit();
-                history = [];
-                renderHistory();
-                alert('✓ Historial borrado');
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
+        const SECURITY_PASSWORD = "Sm170400";
+        let pendingAction = null;
 
         // 🔐 FUNCIONES DE SEGURIDAD (para exportar/borrar)
         function requestPassword(action) {
             pendingAction = action;
             document.getElementById('passwordModal').style.display = 'flex';
             document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
+            
             if (action === 'export') {
-                document.getElementById('modalMessage').textContent = 'Ingresa la contraseña para exportar';
+                document.getElementById('modalMessage').textContent = 'Ingresa la contraseña para exportar el historial';
             } else {
-                document.getElementById('modalMessage').textContent = '⚠️ Ingresa contraseña para BORRAR TODO';
+                document.getElementById('modalMessage').textContent = '⚠️ ADVERTENCIA: Ingresa la contraseña para BORRAR TODO el historial';
             }
         }
 
@@ -853,10 +597,17 @@
             const input = document.getElementById('passwordInput').value;
             if (input === SECURITY_PASSWORD) {
                 closeModal();
-                if (pendingAction === 'export') exportHistory();
-                else if (pendingAction === 'delete' && confirm('¿Borrar TODO?')) clearHistoryFirebase();
+                if (pendingAction === 'export') {
+                    exportHistory();
+                } else if (pendingAction === 'delete') {
+                    if (confirm('¿Estás SEGURO de borrar TODO el historial? Esta acción no se puede deshacer.')) {
+                        clearHistory();
+                    }
+                }
             } else {
                 alert('❌ Contraseña incorrecta');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
             }
         }
 
@@ -864,6 +615,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadTheme();
             loadTariffPreference();
+            renderHistory();
             createChart();
         });
 
@@ -896,12 +648,25 @@
         }
 
         function selectVehicle(vehicle) {
-            if (vehicle !== 'aion-es') { alert('🚗 Próximamente'); return; }
+            if (vehicle === 'byd-e5') { 
+                alert('🚗 BYD E5 - Próximamente disponible'); 
+                return; 
+            }
+            
             currentVehicle = vehicle;
             document.querySelectorAll('.vehicle-option').forEach(opt => {
                 opt.classList.remove('active');
                 if (opt.dataset.vehicle === vehicle) opt.classList.add('active');
             });
+            
+            // Actualizar info de carga
+            const v = vehicles[vehicle];
+            document.getElementById('chargingInfo').innerHTML = 
+                `<i class="fas fa-bolt"></i><strong>Carga Rápida DC (${v.name}):</strong> ${v.chargingInfo}`;
+            document.getElementById('curveValues').textContent = v.chargingInfo;
+            
+            // Recrear gráfica con nuevo vehículo
+            createChart();
         }
 
         function getGreeting() {
@@ -916,6 +681,7 @@
             const efficiency = vehicle.efficiency;
             const curve = vehicle.chargingCurve;
             let totalMinutes = 0;
+            
             const threshold = curve.stage1.maxPercent;
             const power1 = curve.stage1.power;
             const power2 = curve.stage2.power;
@@ -941,12 +707,12 @@
 
             saveTariffPreference(inputTariff);
 
-            if (!name) { alert('⚠️ Ingresa tu nombre'); return; }
-            if (!kmText) { alert('⚠️ Ingresa los km'); return; }
+            if (!name) { alert('⚠️ Por favor, ingresa tu nombre'); return; }
+            if (!kmText) { alert('⚠️ Por favor, ingresa los kilómetros restantes'); return; }
 
             const kmRemaining = parseFloat(kmText);
             const vehicle = vehicles[currentVehicle];
-            if (kmRemaining < 0) { alert('❌ KM inválidos'); return; }
+            if (kmRemaining < 0) { alert('❌ Los kilómetros no pueden ser negativos'); return; }
 
             let percentage = (kmRemaining / vehicle.maxRange) * 100;
             let displayKm = kmRemaining;
@@ -980,24 +746,31 @@
             alertBox.className = 'alert';
             if (kmRemaining <= 150) {
                 alertBox.classList.add('critical');
-                alertBox.innerHTML = `⚠️ ¡Batería baja!<br>Conecta a carga pronto.`;
+                alertBox.innerHTML = `⚠️ ¡Batería baja!<br>Te recomendamos conectar a carga pronto.<br>Con ${kmRemaining.toFixed(0)} km restantes, evita trayectos largos.`;
             } else if (kmRemaining <= 220) {
                 alertBox.classList.add('warning');
-                alertBox.innerHTML = '💡 Planifica tu próxima recarga.';
+                alertBox.innerHTML = '💡 Sugerencia: Planifica tu próxima recarga.';
             } else {
                 alertBox.classList.add('success');
-                alertBox.innerHTML = '✅ Nivel óptimo. ¡Disfruta!';
+                alertBox.innerHTML = '✅ Nivel óptimo. ¡Disfruta tu viaje!';
             }
 
             updateChart(kmRemaining, percentage);
-            saveToFirebase({ name, km: kmRemaining, percentage, cost, vehicle: vehicle.name, chargingTime: chargingInfo.minutes, date: new Date().toLocaleString('es-ES') });
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            saveToHistory({ name, km: kmRemaining, percentage, cost, vehicle: vehicle.name, chargingTime: chargingInfo.minutes, date: new Date().toLocaleString('es-ES') });
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function saveToHistory(record) {
+            history.unshift(record);
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('batteryHistory', JSON.stringify(history));
+            renderHistory();
         }
 
         function renderHistory() {
             const historyList = document.getElementById('historyList');
             if (history.length === 0) {
-                historyList.innerHTML = '<div class="empty-history"><i class="fas fa-inbox"></i><br>Sin registros</div>';
+                historyList.innerHTML = '<div class="empty-history"><i class="fas fa-inbox"></i><br>Sin registros aún</div>';
                 return;
             }
             historyList.innerHTML = '';
@@ -1021,42 +794,54 @@
                         <div class="history-percentage">${record.percentage.toFixed(1)}%</div>
                         <div style="text-align: center; font-size: 0.8em; opacity: 0.7;">💰 $${record.cost.toFixed(2)}</div>
                     </div>
-                    <button class="history-delete" onclick="deleteHistoryItem('${record.id}')"><i class="fas fa-trash"></i></button>
+                    <button class="history-delete" onclick="deleteHistoryItem('${record.id || Date.now()}')"><i class="fas fa-trash"></i></button>
                 `;
                 historyList.appendChild(item);
             });
         }
 
-        async function deleteHistoryItem(id) {
-            if (confirm('¿Borrar?')) {
-                await db.collection('batteryHistory').doc(id).delete();
-                loadHistoryFromFirebase();
+        function deleteHistoryItem(id) {
+            if (confirm('¿Borrar este registro?')) {
+                history = history.filter(r => (r.id || Date.now()) !== id);
+                localStorage.setItem('batteryHistory', JSON.stringify(history));
+                renderHistory();
             }
         }
 
+        function clearHistory() {
+            history = [];
+            localStorage.setItem('batteryHistory', JSON.stringify(history));
+            renderHistory();
+            alert('✓ Historial borrado');
+        }
+
         function exportHistory() {
-            if (history.length === 0) { alert('Sin datos'); return; }
+            if (history.length === 0) { alert('No hay datos para exportar'); return; }
             let csv = 'Fecha;Nombre;Vehiculo;KM;Porcentaje;Tiempo (min);Costo (MXN)\n';
             history.forEach(r => {
-                const tiempo = r.chargingTime ? Math.round(r.chargingTime) : 'N/A';
-                const costo = r.cost ? r.cost.toFixed(2) : '0.00';
+                const tiempo = r.chargingTime !== undefined ? Math.round(r.chargingTime) : 'N/A';
+                const costo = r.cost !== undefined ? r.cost.toFixed(2) : '0.00';
                 csv += `${r.date};${r.name};${r.vehicle};${r.km};${r.percentage.toFixed(2)};${tiempo};${costo}\n`;
             });
             const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `historial_${new Date().toISOString().split('T')[0]}.csv`;
+            link.download = `historial_bateria_${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
         }
 
         function createChart() {
             const ctx = document.getElementById('consumptionChart').getContext('2d');
             const vehicle = vehicles[currentVehicle];
+            
+            if (chart) chart.destroy();
+            
             const kmValues = [], percentValues = [];
             for (let km = 0; km <= vehicle.maxRange; km += 20) {
                 kmValues.push(km);
                 percentValues.push((km / vehicle.maxRange) * 100);
             }
+            
             const isLight = document.body.classList.contains('light-mode');
             const textColor = isLight ? '#2d3748' : '#ffffff';
             const gridColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
@@ -1070,23 +855,20 @@
                         data: percentValues,
                         borderColor: '#00d4ff',
                         backgroundColor: 'rgba(0, 212, 255, 0.1)',
-                        borderWidth: 3, fill: true, tension: 0.4
+                        borderWidth: 3, fill: true, tension: 0.4, pointRadius: 0
                     }, {
                         label: 'Tu nivel',
                         data: [],
                         backgroundColor: '#00ff88',
                         borderColor: '#ffffff',
-                        borderWidth: 2,
-                        pointRadius: 8,
-                        showLine: false
+                        borderWidth: 2, pointRadius: 8, pointHoverRadius: 10, showLine: false
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: textColor } },
-                        title: { display: true, text: '📊 Gráfica', color: '#00d4ff' }
+                        legend: { labels: { color: textColor, font: { size: 11 } } },
+                        title: { display: true, text: '📊 Gráfica de Consumo', color: '#00d4ff', font: { size: 14, weight: 'bold' } }
                     },
                     scales: {
                         x: { title: { display: true, text: 'Kilómetros', color: textColor }, grid: { color: gridColor }, ticks: { color: textColor } },
@@ -1103,7 +885,7 @@
         }
 
         document.getElementById('kmInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') calculateBattery(); });
-        document.getElementById('loginPassword')?.addEventListener('keypress', e => { if (e.key === 'Enter') login(); });
+        document.getElementById('passwordInput')?.addEventListener('keypress', e => { if (e.key === 'Enter') verifyPassword(); });
     </script>
 </body>
 </html>
